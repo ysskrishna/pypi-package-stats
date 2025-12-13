@@ -10,6 +10,7 @@ dependencies = [
     "requests>=2.31.0",
     "diskcache>=5.6.0",
     "platformdirs>=3.0.0",
+    "nestedutils==1.0.1",
 ]
 
 [project.scripts]

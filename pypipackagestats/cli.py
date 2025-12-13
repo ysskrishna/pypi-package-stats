@@ -3,6 +3,7 @@ import requests
 import json as json_lib
 from typing import Optional
 from rich.console import Console
+from nestedutils import get_path
 
 from pypipackagestats.api import PyPIClient
 from pypipackagestats.formatters import (
@@ -57,7 +58,7 @@ def main(
     try:
         # Fetch all data
         pkg_data = client.get_package_info(package)
-        package_info = pkg_data["info"]
+        package_info = get_path(pkg_data, "info", default={})
         upload_time = get_upload_time(pkg_data)
         
         recent_stats = client.get_recent_stats(package)
@@ -67,7 +68,7 @@ def main(
         
         if json:
             # JSON output mode
-            total_180d = sum(d["downloads"] for d in overall_stats)
+            total_180d = sum(get_path(d, "downloads", default=0) for d in overall_stats)
             py_last30 = get_last_30_days_data(py_stats)
             os_last30 = get_last_30_days_data(os_stats)
             
@@ -81,19 +82,19 @@ def main(
             
             output = {
                 "package": {
-                    "name": package_info["name"],
-                    "version": package_info["version"],
+                    "name": get_path(package_info, "name", default=""),
+                    "version": get_path(package_info, "version", default=""),
                     "upload_time": upload_time[:DATE_ISO_FORMAT_LENGTH] if upload_time else "",
-                    "description": package_info.get("summary"),
-                    "author": package_info.get("author") or package_info.get("author_email"),
-                    "license": package_info.get("license"),
-                    "home_page": package_info.get("home_page") or package_info.get("project_url"),
-                    "pypi_url": package_info.get("package_url")
+                    "description": get_path(package_info, "summary"),
+                    "author": get_path(package_info, "author") or get_path(package_info, "author_email"),
+                    "license": get_path(package_info, "license"),
+                    "home_page": get_path(package_info, "home_page") or get_path(package_info, "project_url"),
+                    "pypi_url": get_path(package_info, "package_url")
                 },
                 "downloads": {
-                    "last_day": recent_stats["last_day"],
-                    "last_week": recent_stats["last_week"],
-                    "last_month": recent_stats["last_month"],
+                    "last_day": get_path(recent_stats, "last_day", default=0),
+                    "last_week": get_path(recent_stats, "last_week", default=0),
+                    "last_month": get_path(recent_stats, "last_month", default=0),
                     "last_180d": total_180d
                 },
                 "python_versions": [

@@ -1,7 +1,7 @@
 import requests
 import diskcache
-from pathlib import Path
 from typing import Optional
+from nestedutils import get_path
 from pypipackagestats.utils import get_cache_dir
 from pypipackagestats.constants import DEFAULT_CACHE_TTL
 
@@ -70,22 +70,22 @@ class PyPIClient:
     def get_recent_stats(self, package: str) -> dict:
         """Get recent download stats"""
         url = self.STATS_API.format(pkg=package.lower()) + "recent"
-        return self._cached_get(url)["data"]
+        return get_path(self._cached_get(url), "data", default={})
     
     def get_overall_stats(self, package: str) -> list:
         """Get overall stats (180 days)"""
         url = self.STATS_API.format(pkg=package.lower()) + "overall?mirrors=false"
-        return self._cached_get(url)["data"]
+        return get_path(self._cached_get(url), "data", default=[])
     
     def get_python_minor_stats(self, package: str) -> list:
         """Get Python version breakdown"""
         url = self.STATS_API.format(pkg=package.lower()) + "python_minor"
-        return self._cached_get(url)["data"]
+        return get_path(self._cached_get(url), "data", default=[])
     
     def get_system_stats(self, package: str) -> list:
         """Get OS breakdown"""
         url = self.STATS_API.format(pkg=package.lower()) + "system"
-        return self._cached_get(url)["data"]
+        return get_path(self._cached_get(url), "data", default=[])
     
     def clear_cache(self):
         """Clear all cached data"""

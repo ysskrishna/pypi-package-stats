@@ -1,6 +1,7 @@
 from datetime import datetime, date
 from pathlib import Path
 import platformdirs
+from nestedutils import get_path
 
 
 def humanize_number(num: int) -> str:
@@ -41,14 +42,14 @@ def normalize_os_name(os_name: str) -> str:
 
 def get_upload_time(pkg_data: dict) -> str:
     """Extract upload_time from package data"""
-    info = pkg_data.get("info", {})
-    version = info.get("version")
-    releases = pkg_data.get("releases", {})
+    version = get_path(pkg_data, "info.version")
     
-    if version and version in releases and releases[version]:
-        # Get the first release file (usually the most recent)
-        first_release = releases[version][0]
-        upload_time = first_release.get("upload_time") or first_release.get("upload_time_iso_8601")
+    if version:
+        # Try to get upload_time from the first release file
+        # Use list path to safely handle version strings that might contain special characters
+        upload_time = get_path(pkg_data, ["releases", version, 0, "upload_time"])
+        if not upload_time:
+            upload_time = get_path(pkg_data, ["releases", version, 0, "upload_time_iso_8601"])
         if upload_time:
             return upload_time
     

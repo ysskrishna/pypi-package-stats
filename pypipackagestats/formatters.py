@@ -3,6 +3,7 @@ from rich.table import Table
 from rich import box
 from typing import Dict, Any
 import json
+from nestedutils import get_path
 
 from pypipackagestats.utils import (
     get_last_30_days_data,
@@ -21,47 +22,46 @@ console = Console()
 
 def format_package_info(info: Dict[str, Any], json_output: bool = False) -> str:
     """Format package metadata"""
-    upload_time = info.get("upload_time", "")
+    upload_time = get_path(info, "upload_time", default="")
     upload_date_str = upload_time[:DATE_ISO_FORMAT_LENGTH] if upload_time else "(unknown)"
     
     if json_output:
         return json.dumps({
-            "name": info["name"],
-            "version": info["version"],
+            "name": get_path(info, "name", default=""),
+            "version": get_path(info, "version", default=""),
             "upload_time": upload_date_str,
-            "description": info.get("summary"),
-            "author": info.get("author") or info.get("author_email"),
-            "license": info.get("license"),
-            "home_page": info.get("home_page") or info.get("project_url"),
-            "pypi_url": info.get("package_url")
+            "description": get_path(info, "summary"),
+            "author": get_path(info, "author") or get_path(info, "author_email"),
+            "license": get_path(info, "license"),
+            "home_page": get_path(info, "home_page") or get_path(info, "project_url"),
+            "pypi_url": get_path(info, "package_url")
         }, indent=2)
     
     # Rich formatted output
-    name = info["name"]
-    version = info["version"]
+    name = get_path(info, "name", default="")
+    version = get_path(info, "version", default="")
     upload_date = upload_date_str
     
     console.print(f"\n[bold cyan]{name} {version}[/bold cyan] [dim]({upload_date})[/dim]")
-    console.print(f"Description : {info.get('summary') or '(none)'}")
-    console.print(f"Author      : {info.get('author') or info.get('author_email') or '(unknown)'}")
-    console.print(f"License     : {info.get('license') or '(not specified)'}")
+    console.print(f"Description : {get_path(info, 'summary') or '(none)'}")
+    console.print(f"Author      : {get_path(info, 'author') or get_path(info, 'author_email') or '(unknown)'}")
+    console.print(f"License     : {get_path(info, 'license') or '(not specified)'}")
     
-    home_page = info.get('home_page') or info.get('project_url') or \
-                (info.get('project_urls', {}).get('Homepage', '(none)') if isinstance(info.get('project_urls'), dict) else '(none)')
+    home_page = get_path(info, "home_page") or get_path(info, "project_url") or get_path(info, "project_urls.Homepage") or "(none)"
     console.print(f"Home page   : {home_page}")
-    console.print(f"PyPI        : {info.get('package_url')}\n")
+    console.print(f"PyPI        : {get_path(info, 'package_url') or ''}\n")
     
     return ""
 
 
 def format_download_stats(recent: Dict, overall: list, json_output: bool = False) -> str:
     """Format download statistics"""
-    total_180d = sum(d["downloads"] for d in overall)
+    total_180d = sum(get_path(d, "downloads", default=0) for d in overall)
     
     stats = {
-        "last_day": recent["last_day"],
-        "last_week": recent["last_week"],
-        "last_month": recent["last_month"],
+        "last_day": get_path(recent, "last_day", default=0),
+        "last_week": get_path(recent, "last_week", default=0),
+        "last_month": get_path(recent, "last_month", default=0),
         "last_180d": total_180d
     }
     
