@@ -56,8 +56,9 @@ class PyPIClient:
         response.raise_for_status()
         data = response.json()
         
-        # Store in cache
-        self.cache.set(cache_key, data, expire=self.cache_ttl)
+        # Store in cache if the request was successful
+        if 200 <= response.status_code < 300:
+            self.cache.set(cache_key, data, expire=self.cache_ttl)
         
         return data
     
