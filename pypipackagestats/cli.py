@@ -12,6 +12,12 @@ from pypipackagestats.formatters import (
     format_os_distribution,
 )
 from pypipackagestats.utils import get_last_30_days_data, aggregate_by_category, normalize_os_name, get_cache_dir
+from pypipackagestats.constants import (
+    DEFAULT_CACHE_TTL,
+    TOP_PYTHON_VERSIONS_COUNT,
+    TOP_OS_COUNT,
+    DATE_ISO_FORMAT_LENGTH,
+)
 
 app = typer.Typer(help="Get comprehensive PyPI package information")
 console = Console()
@@ -24,7 +30,7 @@ def main(
     cache_ttl: Optional[int] = typer.Option(
         None,
         "--cache-ttl",
-        help="Cache TTL in seconds (default: 3600 = 1 hour). Use 0 to disable cache."
+        help=f"Cache TTL in seconds (default: {DEFAULT_CACHE_TTL} seconds). Use 0 to disable cache."
     ),
     no_cache: bool = typer.Option(
         False,
@@ -46,7 +52,7 @@ def main(
     """
     # Determine cache settings
     use_cache = not no_cache
-    ttl = cache_ttl if cache_ttl is not None else 3600
+    ttl = cache_ttl if cache_ttl is not None else DEFAULT_CACHE_TTL
     
     # If cache_ttl is 0, disable cache
     if cache_ttl == 0:
@@ -75,14 +81,14 @@ def main(
             total_py = sum(py_totals.values())
             total_os = sum(os_totals.values())
             
-            top_py = sorted(py_totals.items(), key=lambda x: -x[1])[:5]
-            top_os = sorted(os_totals.items(), key=lambda x: -x[1])[:4]
+            top_py = sorted(py_totals.items(), key=lambda x: -x[1])[:TOP_PYTHON_VERSIONS_COUNT]
+            top_os = sorted(os_totals.items(), key=lambda x: -x[1])[:TOP_OS_COUNT]
             
             output = {
                 "package": {
                     "name": package_info["name"],
                     "version": package_info["version"],
-                    "upload_time": package_info["upload_time"][:10],
+                    "upload_time": package_info["upload_time"][:DATE_ISO_FORMAT_LENGTH],
                     "description": package_info.get("summary"),
                     "author": package_info.get("author") or package_info.get("author_email"),
                     "license": package_info.get("license"),

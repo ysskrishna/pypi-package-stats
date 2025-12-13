@@ -10,6 +10,11 @@ from pypipackagestats.utils import (
     normalize_os_name,
     humanize_number,
 )
+from pypipackagestats.constants import (
+    TOP_PYTHON_VERSIONS_COUNT,
+    TOP_OS_COUNT,
+    DATE_ISO_FORMAT_LENGTH,
+)
 
 console = Console()
 
@@ -20,7 +25,7 @@ def format_package_info(info: Dict[str, Any], json_output: bool = False) -> str:
         return json.dumps({
             "name": info["name"],
             "version": info["version"],
-            "upload_time": info["upload_time"][:10],
+            "upload_time": info["upload_time"][:DATE_ISO_FORMAT_LENGTH],
             "description": info.get("summary"),
             "author": info.get("author") or info.get("author_email"),
             "license": info.get("license"),
@@ -31,7 +36,7 @@ def format_package_info(info: Dict[str, Any], json_output: bool = False) -> str:
     # Rich formatted output
     name = info["name"]
     version = info["version"]
-    upload_date = info["upload_time"][:10]
+    upload_date = info["upload_time"][:DATE_ISO_FORMAT_LENGTH]
     
     console.print(f"\n[bold cyan]{name} {version}[/bold cyan] [dim]({upload_date})[/dim]")
     console.print(f"Description : {info.get('summary') or '(none)'}")
@@ -80,7 +85,7 @@ def format_python_versions(py_data: list, json_output: bool = False) -> str:
     last30 = get_last_30_days_data(py_data)
     totals = aggregate_by_category(last30)
     total_downloads = sum(totals.values())
-    top_py = sorted(totals.items(), key=lambda x: -x[1])[:5]
+    top_py = sorted(totals.items(), key=lambda x: -x[1])[:TOP_PYTHON_VERSIONS_COUNT]
     
     if json_output:
         result = {
@@ -119,7 +124,7 @@ def format_os_distribution(os_data: list, json_output: bool = False) -> str:
     last30 = get_last_30_days_data(os_data)
     totals = aggregate_by_category(last30)
     total_downloads = sum(totals.values())
-    top_os = sorted(totals.items(), key=lambda x: -x[1])[:4]
+    top_os = sorted(totals.items(), key=lambda x: -x[1])[:TOP_OS_COUNT]
     
     if json_output:
         result = {

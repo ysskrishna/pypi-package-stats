@@ -3,18 +3,19 @@ import diskcache
 from pathlib import Path
 from typing import Optional
 from pypipackagestats.utils import get_cache_dir
+from pypipackagestats.constants import DEFAULT_CACHE_TTL
 
 
 class PyPIClient:
     PYPI_API = "https://pypi.org/pypi/{pkg}/json"
     STATS_API = "https://pypistats.org/api/packages/{pkg}/"
     
-    def __init__(self, cache_ttl: Optional[int] = 3600, use_cache: bool = True):
+    def __init__(self, cache_ttl: Optional[int] = DEFAULT_CACHE_TTL, use_cache: bool = True):
         """
         Initialize PyPI client with persistent disk cache.
         
         Args:
-            cache_ttl: Time-to-live for cache entries in seconds (default: 3600 = 1 hour)
+            cache_ttl: Time-to-live for cache entries in seconds (default: DEFAULT_CACHE_TTL = 1 hour)
             use_cache: Whether to use cache at all (default: True)
         """
         self.cache_ttl = cache_ttl
