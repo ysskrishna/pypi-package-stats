@@ -1,17 +1,17 @@
 import typer
 import requests
+import json as json_lib
 from typing import Optional
 from rich.console import Console
-from rich import box
 
-from .api import PyPIClient
-from .formatters import (
+from pypipackagestats.api import PyPIClient
+from pypipackagestats.formatters import (
     format_package_info,
     format_download_stats,
     format_python_versions,
     format_os_distribution,
 )
-from .utils import get_last_30_days_data, aggregate_by_category, normalize_os_name
+from pypipackagestats.utils import get_last_30_days_data, aggregate_by_category, normalize_os_name, get_cache_dir
 
 app = typer.Typer(help="Get comprehensive PyPI package information")
 console = Console()
@@ -113,7 +113,6 @@ def main(
                 ]
             }
             
-            import json as json_lib
             console.print(json_lib.dumps(output, indent=2))
         else:
             # Formatted output mode
@@ -137,7 +136,6 @@ def main(
 @app.command()
 def clear_cache():
     """Clear all cached data"""
-    from .api import PyPIClient
     client = PyPIClient()
     client.clear_cache()
     console.print("[green]Cache cleared successfully[/green]")
@@ -146,9 +144,6 @@ def clear_cache():
 @app.command()
 def cache_info():
     """Show cache information"""
-    from .api import PyPIClient
-    from .utils import get_cache_dir
-    
     client = PyPIClient()
     cache_dir = get_cache_dir()
     cache_size = client.get_cache_size()

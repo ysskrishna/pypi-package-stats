@@ -2,7 +2,7 @@ import requests
 import diskcache
 from pathlib import Path
 from typing import Optional
-from .utils import get_cache_dir
+from pypipackagestats.utils import get_cache_dir
 
 
 class PyPIClient:

@@ -4,6 +4,13 @@ from rich import box
 from typing import Dict, Any
 import json
 
+from pypipackagestats.utils import (
+    get_last_30_days_data,
+    aggregate_by_category,
+    normalize_os_name,
+    humanize_number,
+)
+
 console = Console()
 
 
@@ -54,8 +61,6 @@ def format_download_stats(recent: Dict, overall: list, json_output: bool = False
         return json.dumps({"downloads": stats}, indent=2)
     
     # Rich table
-    from .utils import humanize_number
-    
     table = Table(title="Downloads (excluding mirrors)", box=box.ROUNDED)
     table.add_column("Period", style="cyan")
     table.add_column("Downloads", style="green", justify="right")
@@ -72,8 +77,6 @@ def format_download_stats(recent: Dict, overall: list, json_output: bool = False
 
 def format_python_versions(py_data: list, json_output: bool = False) -> str:
     """Format Python version breakdown"""
-    from .utils import get_last_30_days_data, aggregate_by_category, humanize_number
-    
     last30 = get_last_30_days_data(py_data)
     totals = aggregate_by_category(last30)
     total_downloads = sum(totals.values())
@@ -113,8 +116,6 @@ def format_python_versions(py_data: list, json_output: bool = False) -> str:
 
 def format_os_distribution(os_data: list, json_output: bool = False) -> str:
     """Format OS distribution"""
-    from .utils import get_last_30_days_data, aggregate_by_category, normalize_os_name, humanize_number
-    
     last30 = get_last_30_days_data(os_data)
     totals = aggregate_by_category(last30)
     total_downloads = sum(totals.values())
