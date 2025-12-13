@@ -46,7 +46,7 @@ class PyPIClient:
         cache_key = f"url:{url}"
         
         # Try to get from cache
-        cached_data = self.cache.get(cache_key, default=None, expire_time=self.cache_ttl)
+        cached_data = self.cache.get(cache_key, default=None)
         
         if cached_data is not None:
             return cached_data
