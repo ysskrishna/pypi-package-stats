@@ -11,7 +11,7 @@ from pypipackagestats.formatters import (
     format_python_versions,
     format_os_distribution,
 )
-from pypipackagestats.utils import get_last_30_days_data, aggregate_by_category, normalize_os_name, get_cache_dir
+from pypipackagestats.utils import get_last_30_days_data, aggregate_by_category, normalize_os_name, get_cache_dir, get_upload_time
 from pypipackagestats.constants import (
     DEFAULT_CACHE_TTL,
     TOP_PYTHON_VERSIONS_COUNT,
@@ -58,6 +58,7 @@ def main(
         # Fetch all data
         pkg_data = client.get_package_info(package)
         package_info = pkg_data["info"]
+        upload_time = get_upload_time(pkg_data)
         
         recent_stats = client.get_recent_stats(package)
         overall_stats = client.get_overall_stats(package)
@@ -82,7 +83,7 @@ def main(
                 "package": {
                     "name": package_info["name"],
                     "version": package_info["version"],
-                    "upload_time": package_info["upload_time"][:DATE_ISO_FORMAT_LENGTH],
+                    "upload_time": upload_time[:DATE_ISO_FORMAT_LENGTH] if upload_time else "",
                     "description": package_info.get("summary"),
                     "author": package_info.get("author") or package_info.get("author_email"),
                     "license": package_info.get("license"),
@@ -116,7 +117,9 @@ def main(
             console.print(json_lib.dumps(output, indent=2))
         else:
             # Formatted output mode
-            format_package_info(package_info, json_output=False)
+            # Add upload_time to package_info for formatters
+            package_info_with_upload = {**package_info, "upload_time": upload_time}
+            format_package_info(package_info_with_upload, json_output=False)
             format_download_stats(recent_stats, overall_stats, json_output=False)
             format_python_versions(py_stats, json_output=False)
             format_os_distribution(os_stats, json_output=False)

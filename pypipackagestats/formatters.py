@@ -21,11 +21,14 @@ console = Console()
 
 def format_package_info(info: Dict[str, Any], json_output: bool = False) -> str:
     """Format package metadata"""
+    upload_time = info.get("upload_time", "")
+    upload_date_str = upload_time[:DATE_ISO_FORMAT_LENGTH] if upload_time else "(unknown)"
+    
     if json_output:
         return json.dumps({
             "name": info["name"],
             "version": info["version"],
-            "upload_time": info["upload_time"][:DATE_ISO_FORMAT_LENGTH],
+            "upload_time": upload_date_str,
             "description": info.get("summary"),
             "author": info.get("author") or info.get("author_email"),
             "license": info.get("license"),
@@ -36,7 +39,7 @@ def format_package_info(info: Dict[str, Any], json_output: bool = False) -> str:
     # Rich formatted output
     name = info["name"]
     version = info["version"]
-    upload_date = info["upload_time"][:DATE_ISO_FORMAT_LENGTH]
+    upload_date = upload_date_str
     
     console.print(f"\n[bold cyan]{name} {version}[/bold cyan] [dim]({upload_date})[/dim]")
     console.print(f"Description : {info.get('summary') or '(none)'}")

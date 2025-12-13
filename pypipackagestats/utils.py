@@ -39,6 +39,22 @@ def normalize_os_name(os_name: str) -> str:
     return mapping.get(os_name.lower(), os_name.title() or "other")
 
 
+def get_upload_time(pkg_data: dict) -> str:
+    """Extract upload_time from package data"""
+    info = pkg_data.get("info", {})
+    version = info.get("version")
+    releases = pkg_data.get("releases", {})
+    
+    if version and version in releases and releases[version]:
+        # Get the first release file (usually the most recent)
+        first_release = releases[version][0]
+        upload_time = first_release.get("upload_time") or first_release.get("upload_time_iso_8601")
+        if upload_time:
+            return upload_time
+    
+    return ""
+
+
 def get_cache_dir() -> Path:
     """Get cache directory for diskcache (platform-specific)"""
     cache_dir = Path(platformdirs.user_cache_dir("pypipackagestats", "pypipackagestats"))
