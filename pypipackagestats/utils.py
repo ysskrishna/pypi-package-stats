@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import date
 from pathlib import Path
 import platformdirs
 from nestedutils import get_path
@@ -37,7 +37,7 @@ def normalize_os_name(os_name: str) -> str:
         "windows": "Windows",
         "linux": "Linux"
     }
-    return mapping.get(os_name.lower(), os_name.title() or "other")
+    return mapping.get(os_name.lower(), os_name.title())
 
 
 def get_upload_time(pkg_data: dict) -> str:
