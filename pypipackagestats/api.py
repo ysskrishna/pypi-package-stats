@@ -10,22 +10,25 @@ class PyPIClient:
     PYPI_API = "https://pypi.org/pypi/{pkg}/json"
     STATS_API = "https://pypistats.org/api/packages/{pkg}/"
     
-    def __init__(self, cache_ttl: Optional[int] = DEFAULT_CACHE_TTL, use_cache: bool = True):
+    def __init__(self, cache_ttl: Optional[int] = DEFAULT_CACHE_TTL):
         """
         Initialize PyPI client with persistent disk cache.
         
         Args:
-            cache_ttl: Time-to-live for cache entries in seconds (default: DEFAULT_CACHE_TTL = 1 hour)
-            use_cache: Whether to use cache at all (default: True)
+            cache_ttl: Time-to-live for cache entries in seconds.
+                      - Positive integer → cache with that TTL (seconds)
+                      - 0 → disable caching completely
+                      - None or omitted → use default (3600 seconds)
         """
-        self.cache_ttl = cache_ttl
-        self.use_cache = use_cache
-        
-        if self.use_cache:
+        if cache_ttl == 0:
+            # Disable caching
+            self.cache = None
+            self.cache_ttl = 0
+        else:
+            # Enable caching with provided TTL or default
+            self.cache_ttl = cache_ttl or DEFAULT_CACHE_TTL
             cache_dir = get_cache_dir() / "api_cache"
             self.cache = diskcache.Cache(cache_dir)
-        else:
-            self.cache = None
     
     def _cached_get(self, url: str) -> dict:
         """
@@ -33,7 +36,7 @@ class PyPIClient:
         
         Cache keys are based on URL, and entries expire after cache_ttl seconds.
         """
-        if not self.use_cache or self.cache is None:
+        if self.cache is None:
             # No cache - direct API call
             response = requests.get(url)
             response.raise_for_status()

@@ -30,12 +30,12 @@ def main(
     cache_ttl: Optional[int] = typer.Option(
         None,
         "--cache-ttl",
-        help=f"Cache TTL in seconds (default: {DEFAULT_CACHE_TTL} seconds). Use 0 to disable cache."
+        help=f"Cache TTL in seconds (0 = disable caching, default = {DEFAULT_CACHE_TTL})"
     ),
     no_cache: bool = typer.Option(
         False,
         "--no-cache",
-        help="Disable caching entirely (bypasses cache for this run)"
+        help="Shortcut to disable cache (equivalent to --cache-ttl 0)"
     ),
 ):
     """
@@ -47,18 +47,12 @@ def main(
     Caching:
     - Default cache TTL: 1 hour (3600 seconds)
     - Cache persists between CLI runs (stored on disk)
-    - Use --cache-ttl to set custom TTL
-    - Use --no-cache to bypass cache for this run
+    - Use --cache-ttl to set custom TTL (use 0 to disable)
+    - Use --no-cache as a shortcut to disable cache (equivalent to --cache-ttl 0)
     """
-    # Determine cache settings
-    use_cache = not no_cache
-    ttl = cache_ttl if cache_ttl is not None else DEFAULT_CACHE_TTL
     
-    # If cache_ttl is 0, disable cache
-    if cache_ttl == 0:
-        use_cache = False
-    
-    client = PyPIClient(cache_ttl=ttl, use_cache=use_cache)
+    ttl = 0 if no_cache else cache_ttl # --no-cache wins: convert to cache_ttl=0
+    client = PyPIClient(cache_ttl=ttl)
     
     try:
         # Fetch all data
@@ -156,7 +150,10 @@ def cache_info():
     
     console.print(f"[cyan]Cache directory:[/cyan] {cache_dir / 'api_cache'}")
     console.print(f"[cyan]Cache entries:[/cyan] {cache_size}")
-    console.print(f"[cyan]Cache TTL:[/cyan] {client.cache_ttl} seconds ({client.cache_ttl / 3600:.1f} hours)")
+    if client.cache_ttl == 0:
+        console.print(f"[cyan]Cache TTL:[/cyan] [red]Disabled[/red]")
+    else:
+        console.print(f"[cyan]Cache TTL:[/cyan] {client.cache_ttl} seconds ({client.cache_ttl / 3600:.1f} hours)")
 
 
 if __name__ == "__main__":
