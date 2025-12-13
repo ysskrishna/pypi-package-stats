@@ -100,7 +100,7 @@ def main(
                 "python_versions": [
                     {
                         "version": cat or "null",
-                        "percentage": round(100 * v / total_py, 1),
+                        "percentage": round(100 * v / total_py, 1) if total_py > 0 else 0.0,
                         "downloads": v
                     }
                     for cat, v in top_py
@@ -108,7 +108,7 @@ def main(
                 "operating_systems": [
                     {
                         "os": normalize_os_name(cat),
-                        "percentage": round(100 * v / total_os, 1),
+                        "percentage": round(100 * v / total_os, 1) if total_os > 0 else 0.0,
                         "downloads": v
                     }
                     for cat, v in top_os

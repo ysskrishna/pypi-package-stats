@@ -95,7 +95,7 @@ def format_python_versions(py_data: list, json_output: bool = False) -> str:
             "python_versions": [
                 {
                     "version": cat or "null",
-                    "percentage": round(100 * v / total_downloads, 1),
+                    "percentage": round(100 * v / total_downloads, 1) if total_downloads > 0 else 0.0,
                     "downloads": v
                 }
                 for cat, v in top_py
@@ -110,7 +110,7 @@ def format_python_versions(py_data: list, json_output: bool = False) -> str:
     table.add_column("Downloads", style="green", justify="right")
     
     for cat, v in top_py:
-        pct = 100 * v / total_downloads
+        pct = 100 * v / total_downloads if total_downloads > 0 else 0.0
         table.add_row(
             cat or "null",
             f"{pct:.1f}%",
@@ -134,7 +134,7 @@ def format_os_distribution(os_data: list, json_output: bool = False) -> str:
             "operating_systems": [
                 {
                     "os": normalize_os_name(cat),
-                    "percentage": round(100 * v / total_downloads, 1),
+                    "percentage": round(100 * v / total_downloads, 1) if total_downloads > 0 else 0.0,
                     "downloads": v
                 }
                 for cat, v in top_os
@@ -149,7 +149,7 @@ def format_os_distribution(os_data: list, json_output: bool = False) -> str:
     table.add_column("Downloads", style="green", justify="right")
     
     for cat, v in top_os:
-        pct = 100 * v / total_downloads
+        pct = 100 * v / total_downloads if total_downloads > 0 else 0.0
         table.add_row(
             normalize_os_name(cat),
             f"{pct:.1f}%",
