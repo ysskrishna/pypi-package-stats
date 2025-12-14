@@ -130,6 +130,8 @@ Default cache TTL is 3600 seconds (1 hour). You can customize this or disable ca
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+For development setup and guidelines, see [DEVELOPMENT.md](https://github.com/ysskrishna/pypi-package-stats/blob/main/DEVELOPMENT.md).
+
 ## Issues
 
 If you encounter any issues or have feature requests, please open an issue on [GitHub](https://github.com/ysskrishna/pypi-package-stats/issues).
