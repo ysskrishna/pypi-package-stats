@@ -54,8 +54,8 @@ def main(
         raise typer.Exit(code=1)
 
 
-@app.command()
-def clear_cache():
+@app.command(name="cache-clear")
+def cache_clear():
     """Clear all cached API responses."""
     client = PyPIClient()
     client.clear_cache()

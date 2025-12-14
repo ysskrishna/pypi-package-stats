@@ -74,7 +74,7 @@ pypi-package-stats <PACKAGE_NAME> --cache-ttl 7200
 #### Clear cache
 
 ```bash
-pypi-package-stats clear-cache
+pypi-package-stats cache-clear
 ```
 
 #### View cache information
