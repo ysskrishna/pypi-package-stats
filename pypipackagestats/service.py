@@ -6,7 +6,6 @@ from pypipackagestats.output.utils import (
     get_upload_time,
     get_last_30_days_data,
     aggregate_by_category,
-    normalize_os_name,
 )
 from pypipackagestats.constants import (
     TOP_PYTHON_VERSIONS_COUNT,
@@ -66,7 +65,7 @@ class PackageStatsService:
         top_py = sorted(py_totals.items(), key=lambda x: -x[1])[:TOP_PYTHON_VERSIONS_COUNT]
         python_versions = [
             {
-                "version": cat or "null",
+                "version": cat,
                 "downloads": count,
                 "percentage": round(100 * count / total_py, 1) if total_py > 0 else 0.0,
             }
@@ -80,7 +79,7 @@ class PackageStatsService:
         top_os = sorted(os_totals.items(), key=lambda x: -x[1])[:TOP_OS_COUNT]
         operating_systems = [
             {
-                "os": normalize_os_name(cat),
+                "os": cat,
                 "downloads": count,
                 "percentage": round(100 * count / total_os, 1) if total_os > 0 else 0.0,
             }
@@ -89,25 +88,24 @@ class PackageStatsService:
 
         # Package metadata
         info = raw["package_info"]
-        upload_time_str = raw["upload_time"][:DATE_ISO_FORMAT_LENGTH] if raw["upload_time"] else ""
+        upload_time_str = raw["upload_time"][:DATE_ISO_FORMAT_LENGTH] if raw["upload_time"] else None
 
         # Handle project_urls - try different paths
         home_page = (
             get_path(info, "home_page")
             or get_path(info, "project_url")
             or get_path(info, ["project_urls", "Homepage"])
-            or ""
         )
 
         package_metadata = {
-            "name": get_path(info, "name", default=""),
-            "version": get_path(info, "version", default=""),
+            "name": get_path(info, "name"),
+            "version": get_path(info, "version"),
             "upload_time": upload_time_str,
-            "description": get_path(info, "summary") or "",
-            "author": get_path(info, "author") or get_path(info, "author_email") or "",
-            "license": get_path(info, "license") or "",
+            "description": get_path(info, "summary"),
+            "author": get_path(info, "author") or get_path(info, "author_email"),
+            "license": get_path(info, "license"),
             "home_page": home_page,
-            "pypi_url": get_path(info, "package_url") or "",
+            "pypi_url": get_path(info, "package_url"),
         }
 
         downloads = {

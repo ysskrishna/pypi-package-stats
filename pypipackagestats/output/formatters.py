@@ -5,6 +5,7 @@ from rich.panel import Panel
 from rich import box
 from typing import Dict, Any
 from pypipackagestats.core.metadata import get_project_metadata
+from pypipackagestats.output.utils import normalize_os_name
 
 from pypipackagestats.output.utils import humanize_number
 
@@ -14,8 +15,10 @@ console = Console()
 def format_package_info(data: Dict[str, Any]) -> None:
     pkg = data["package"]
 
-    console.print(f"\n[bold cyan]{pkg['name']} {pkg['version']}[/bold cyan] [dim]({pkg['upload_time']})[/dim]")
-    console.print(f"Description : {pkg['description'] or '(none)'}")
+    console.print(f"\n[bold cyan]{pkg['name']}[/bold cyan]")
+    console.print(f"{pkg['description'] or '(none)'}")
+    console.print(f"Version     : {pkg['version']}")
+    console.print(f"Upload time : {pkg['upload_time']}")
     console.print(f"Author      : {pkg['author'] or '(unknown)'}")
     console.print(f"License     : {pkg['license'] or '(not specified)'}")
     console.print(f"Home page   : {pkg['home_page'] or '(none)'}")
@@ -32,7 +35,7 @@ def format_download_stats(data: Dict[str, Any]) -> None:
     table.add_row("Last day", humanize_number(dl["last_day"]))
     table.add_row("Last week", humanize_number(dl["last_week"]))
     table.add_row("Last month", humanize_number(dl["last_month"]))
-    table.add_row("Last 180d", humanize_number(dl["last_180d"]))
+    table.add_row("Last 180 days", humanize_number(dl["last_180d"]))
 
     console.print(table)
     console.print()
@@ -47,12 +50,13 @@ def format_python_versions(data: Dict[str, Any]) -> None:
 
     table = Table(title="Top Python versions (last 30 days)", box=box.ROUNDED)
     table.add_column("Version", style="cyan")
-    table.add_column("%", style="yellow", justify="right")
+    table.add_column("Share", style="yellow", justify="right")
     table.add_column("Downloads", style="green", justify="right")
 
     for item in versions:
+        version = item["version"] if item["version"] != "null" else "Unknown"
         table.add_row(
-            item["version"],
+            version,
             f"{item['percentage']:.1f}%",
             humanize_number(item["downloads"])
         )
@@ -70,12 +74,12 @@ def format_os_distribution(data: Dict[str, Any]) -> None:
 
     table = Table(title="Top operating systems (last 30 days)", box=box.ROUNDED)
     table.add_column("OS", style="cyan")
-    table.add_column("%", style="yellow", justify="right")
+    table.add_column("Share", style="yellow", justify="right")
     table.add_column("Downloads", style="green", justify="right")
 
     for item in systems:
         table.add_row(
-            item["os"],
+            normalize_os_name(item["os"]),
             f"{item['percentage']:.1f}%",
             humanize_number(item["downloads"])
         )

@@ -13,8 +13,8 @@ def humanize_number(num: int) -> str:
 
 def normalize_os_name(os_name: str) -> str:
     """Normalize OS names for display"""
-    if not os_name:
-        return "other"
+    if not os_name or os_name == "null":
+        return "Unknown"
     mapping = {
         "darwin": "macOS",
         "windows": "Windows",
