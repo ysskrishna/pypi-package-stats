@@ -9,11 +9,6 @@ from pypipackagestats.constants import DEFAULT_CACHE_TTL
 from pypipackagestats.output.formatters import print_project_banner
 
 app = typer.Typer(
-    help="""
-    PyPI Package Stats
-
-    Easy PyPI analytics & package stats in your terminal.
-    """,
     invoke_without_command=True,
     no_args_is_help=True,
 )
@@ -42,13 +37,7 @@ def package(
         False, "--no-cache", help="Disable caching (equivalent to --cache-ttl 0)"
     ),
 ):
-    """
-    Display detailed information about a PyPI package.
-
-    Includes metadata, download statistics, Python version breakdown,
-    and operating system distribution.
-    """
-
+    """Display PyPI package metadata and download information."""
     # --no-cache takes precedence
     effective_ttl = 0 if no_cache else (cache_ttl if cache_ttl is not None else DEFAULT_CACHE_TTL)
 
@@ -71,7 +60,7 @@ def package(
 
 @app.command()
 def cache_clear():
-    """Clear all cached API responses."""
+    """Clear cache directory"""
     client = PyPIClient()
     client.clear_cache()
     console.print("[green]✓ Cache cleared successfully[/green]")

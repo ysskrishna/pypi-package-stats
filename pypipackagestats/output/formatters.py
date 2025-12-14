@@ -87,20 +87,18 @@ def print_project_banner():
     banner_text = Text()
     project_metadata = get_project_metadata()
     
-    # ASCII art for "PyPI Package Stats"
-    banner_text.append("\n    ____        ____  ____   ____             __                       _____ __        __      ", style="bold blue")
-    banner_text.append("\n   / __ \\__  __/ __ \\/  _/  / __ \\____ ______/ /______ _____ ____     / ___// /_____ _/ /______", style="bold blue")
-    banner_text.append("\n  / /_/ / / / / /_/ // /   / /_/ / __ `/ ___/ //_/ __ `/ __ `/ _ \\    \\__ \\/ __/ __ `/ __/ ___/", style="bold blue")
-    banner_text.append("\n / ____/ /_/ / ____// /   / ____/ /_/ / /__/ ,< / /_/ / /_/ /  __/   ___/ / /_/ /_/ / /_(__  ) ", style="bold blue")
-    banner_text.append("\n/_/    \\__, /_/   /___/  /_/    \\__,_/\\___/_/|_|\\__,_/\\__, /\\___/   /____/\\__/\\__,_/\\__/____/  ", style="bold blue")
-    banner_text.append("\n      /____/                                         /____/                                    \n", style="bold blue")
+    # ASCII art for "PYPI STATS"
+    banner_text.append("\n  _____       _____ _____   _____           _                       _____ _        _       ", style="bold blue")
+    banner_text.append("\n |  __ \\     |  __ \\_   _| |  __ \\         | |                     / ____| |      | |      ", style="bold blue")
+    banner_text.append("\n | |__) |   _| |__) || |   | |__) |_ _  ___| | ____ _  __ _  ___  | (___ | |_ __ _| |_ ___ ", style="bold blue")
+    banner_text.append("\n |  ___/ | | |  ___/ | |   |  ___/ _` |/ __| |/ / _` |/ _` |/ _ \\  \\___ \\| __/ _` | __/ __|", style="bold blue")
+    banner_text.append("\n | |   | |_| | |    _| |_  | |  | (_| | (__|   < (_| | (_| |  __/  ____) | || (_| | |_\\__ \\", style="bold blue")
+    banner_text.append("\n |_|    \\__, |_|   |_____| |_|   \\__,_|\\___|_|\\_\\__,_|\\__, |\\___| |_____/ \\__\\__,_|\\__|___/", style="bold blue")
+    banner_text.append("\n         __/ |                                         __/ |                               ", style="bold blue")
+    banner_text.append("\n        |___/                                         |___/                                \n", style="bold blue")
     
     banner_text.append(f"Version : {project_metadata.version}\n", style="bold blue")
     banner_text.append(f"Author  : {project_metadata.author} ({project_metadata.author_url})\n", style="magenta")
     banner_text.append(f"Repo    : {project_metadata.repository_url}\n", style="green")
-    banner_text.append(
-        "\nPyPI Package Stats provides easy access to PyPI package analytics and download statistics.",
-        style="bold yellow"
-    )
     
     console.print(Panel(banner_text, expand=False, border_style="blue", title="Welcome", title_align="left"))
