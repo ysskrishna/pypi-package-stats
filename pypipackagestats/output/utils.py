@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 from nestedutils import get_path
 
 
@@ -52,3 +52,18 @@ def aggregate_by_category(data: list) -> dict:
         cat = row["category"]
         totals[cat] = totals.get(cat, 0) + row["downloads"]
     return totals
+
+
+def humanize_date(date_str: str) -> str:
+    """Convert ISO date string (YYYY-MM-DD) to human-readable format"""
+    if not date_str:
+        return date_str
+    
+    try:
+        # Parse ISO date format (YYYY-MM-DD)
+        dt = datetime.strptime(date_str[:10], "%Y-%m-%d")
+        # Format as "Month Day, Year" (e.g., "December 7, 2025")
+        return dt.strftime("%B %d, %Y")
+    except (ValueError, TypeError):
+        # If parsing fails, return the original string
+        return date_str
