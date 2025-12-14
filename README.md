@@ -39,8 +39,11 @@ Disable cache for a single request:
 pypi-package-stats package requests --no-cache
 ```
 
----
+### Example Output
 
+![Example Output](https://raw.githubusercontent.com/ysskrishna/pypi-package-stats/main/media/example_output.png)
+
+---
 
 ## Usage
 
