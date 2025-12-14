@@ -6,15 +6,30 @@ from pypipackagestats.core.client import PyPIClient
 from pypipackagestats.service import PackageStatsService
 from pypipackagestats.core.cache import get_cache_dir
 from pypipackagestats.constants import DEFAULT_CACHE_TTL
+from pypipackagestats.output.formatters import print_project_banner
 
 app = typer.Typer(
-    help="Get comprehensive PyPI package statistics and metadata",
+    help="""
+    PyPI Package Stats
+
+    Easy PyPI analytics & package stats in your terminal.
+    """,
+    invoke_without_command=True,
     no_args_is_help=True,
 )
 console = Console()
 
 
-@app.command()
+@app.callback(invoke_without_command=True)
+def main(ctx: typer.Context):
+    print_project_banner()
+    
+    if ctx.invoked_subcommand is None:
+        # This will show help since no_args_is_help=True
+        pass
+
+
+@app.command(no_args_is_help=True)
 def package(
     package: str = typer.Argument(..., help="Package name to query"),
     json: bool = typer.Option(False, "--json", "-j", help="Output as JSON"),

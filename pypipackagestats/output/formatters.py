@@ -1,7 +1,10 @@
 from rich.console import Console
 from rich.table import Table
+from rich.text import Text
+from rich.panel import Panel
 from rich import box
 from typing import Dict, Any
+from pypipackagestats.core.metadata import get_project_metadata
 
 from pypipackagestats.output.utils import humanize_number
 
@@ -78,3 +81,26 @@ def format_os_distribution(data: Dict[str, Any]) -> None:
         )
 
     console.print(table)
+
+
+def print_project_banner():
+    banner_text = Text()
+    project_metadata = get_project_metadata()
+    
+    # ASCII art for "PyPI Package Stats"
+    banner_text.append("\n    ____        ____  ____   ____             __                       _____ __        __      ", style="bold blue")
+    banner_text.append("\n   / __ \\__  __/ __ \\/  _/  / __ \\____ ______/ /______ _____ ____     / ___// /_____ _/ /______", style="bold blue")
+    banner_text.append("\n  / /_/ / / / / /_/ // /   / /_/ / __ `/ ___/ //_/ __ `/ __ `/ _ \\    \\__ \\/ __/ __ `/ __/ ___/", style="bold blue")
+    banner_text.append("\n / ____/ /_/ / ____// /   / ____/ /_/ / /__/ ,< / /_/ / /_/ /  __/   ___/ / /_/ /_/ / /_(__  ) ", style="bold blue")
+    banner_text.append("\n/_/    \\__, /_/   /___/  /_/    \\__,_/\\___/_/|_|\\__,_/\\__, /\\___/   /____/\\__/\\__,_/\\__/____/  ", style="bold blue")
+    banner_text.append("\n      /____/                                         /____/                                    \n", style="bold blue")
+    
+    banner_text.append(f"Version : {project_metadata.version}\n", style="bold blue")
+    banner_text.append(f"Author  : {project_metadata.author} ({project_metadata.author_url})\n", style="magenta")
+    banner_text.append(f"Repo    : {project_metadata.repository_url}\n", style="green")
+    banner_text.append(
+        "\nPyPI Package Stats provides easy access to PyPI package analytics and download statistics.",
+        style="bold yellow"
+    )
+    
+    console.print(Panel(banner_text, expand=False, border_style="blue", title="Welcome", title_align="left"))
