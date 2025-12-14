@@ -1,32 +1,16 @@
 import typer
 import requests
-import json as json_lib
-from typing import Optional
 from rich.console import Console
-from nestedutils import get_path
 
 from pypipackagestats.core.client import PyPIClient
-from pypipackagestats.output.formatters import (
-    format_package_info,
-    format_download_stats,
-    format_python_versions,
-    format_os_distribution,
-)
-from pypipackagestats.output.utils import (
-    get_upload_time,
-    get_last_30_days_data,
-    aggregate_by_category,
-    normalize_os_name,
-)
+from pypipackagestats.service import PackageStatsService
 from pypipackagestats.core.cache import get_cache_dir
-from pypipackagestats.constants import (
-    DEFAULT_CACHE_TTL,
-    TOP_PYTHON_VERSIONS_COUNT,
-    TOP_OS_COUNT,
-    DATE_ISO_FORMAT_LENGTH,
-)
+from pypipackagestats.constants import DEFAULT_CACHE_TTL
 
-app = typer.Typer(help="Get comprehensive PyPI package information")
+app = typer.Typer(
+    help="Get comprehensive PyPI package statistics and metadata",
+    no_args_is_help=True,
+)
 console = Console()
 
 
@@ -34,138 +18,71 @@ console = Console()
 def main(
     package: str = typer.Argument(..., help="Package name to query"),
     json: bool = typer.Option(False, "--json", "-j", help="Output as JSON"),
-    cache_ttl: Optional[int] = typer.Option(
+    cache_ttl: int | None = typer.Option(
         None,
         "--cache-ttl",
-        help=f"Cache TTL in seconds (0 = disable caching, default = {DEFAULT_CACHE_TTL})"
+        help=f"Cache TTL in seconds (0 = disable, default = {DEFAULT_CACHE_TTL})",
     ),
     no_cache: bool = typer.Option(
-        False,
-        "--no-cache",
-        help="Shortcut to disable cache (equivalent to --cache-ttl 0)"
+        False, "--no-cache", help="Disable caching (equivalent to --cache-ttl 0)"
     ),
 ):
     """
-    Display comprehensive information about a PyPI package.
-    
-    Shows package metadata, download statistics, Python version breakdown,
-    and OS distribution. Use --json for machine-readable output.
-    
-    Caching:
-    - Default cache TTL: 1 hour (3600 seconds)
-    - Cache persists between CLI runs (stored on disk)
-    - Use --cache-ttl to set custom TTL (use 0 to disable)
-    - Use --no-cache as a shortcut to disable cache (equivalent to --cache-ttl 0)
+    Display detailed information about a PyPI package.
+
+    Includes metadata, download statistics, Python version breakdown,
+    and operating system distribution.
     """
-    
-    ttl = 0 if no_cache else cache_ttl # --no-cache wins: convert to cache_ttl=0
-    client = PyPIClient(cache_ttl=ttl)
-    
+
+    # --no-cache takes precedence
+    effective_ttl = 0 if no_cache else (cache_ttl if cache_ttl is not None else DEFAULT_CACHE_TTL)
+
+    client = PyPIClient(cache_ttl=effective_ttl)
+    service = PackageStatsService(client)
+
     try:
-        # Fetch all data
-        pkg_data = client.get_package_info(package)
-        package_info = get_path(pkg_data, "info", default={})
-        upload_time = get_upload_time(pkg_data)
-        
-        recent_stats = client.get_recent_stats(package)
-        overall_stats = client.get_overall_stats(package)
-        py_stats = client.get_python_minor_stats(package)
-        os_stats = client.get_system_stats(package)
-        
         if json:
-            # JSON output mode
-            total_180d = sum(get_path(d, "downloads", default=0) for d in overall_stats)
-            py_last30 = get_last_30_days_data(py_stats)
-            os_last30 = get_last_30_days_data(os_stats)
-            
-            py_totals = aggregate_by_category(py_last30)
-            os_totals = aggregate_by_category(os_last30)
-            total_py = sum(py_totals.values())
-            total_os = sum(os_totals.values())
-            
-            top_py = sorted(py_totals.items(), key=lambda x: -x[1])[:TOP_PYTHON_VERSIONS_COUNT]
-            top_os = sorted(os_totals.items(), key=lambda x: -x[1])[:TOP_OS_COUNT]
-            
-            output = {
-                "package": {
-                    "name": get_path(package_info, "name", default=""),
-                    "version": get_path(package_info, "version", default=""),
-                    "upload_time": upload_time[:DATE_ISO_FORMAT_LENGTH] if upload_time else "",
-                    "description": get_path(package_info, "summary"),
-                    "author": get_path(package_info, "author") or get_path(package_info, "author_email"),
-                    "license": get_path(package_info, "license"),
-                    "home_page": get_path(package_info, "home_page") or get_path(package_info, "project_url"),
-                    "pypi_url": get_path(package_info, "package_url")
-                },
-                "downloads": {
-                    "last_day": get_path(recent_stats, "last_day", default=0),
-                    "last_week": get_path(recent_stats, "last_week", default=0),
-                    "last_month": get_path(recent_stats, "last_month", default=0),
-                    "last_180d": total_180d
-                },
-                "python_versions": [
-                    {
-                        "version": cat or "null",
-                        "percentage": round(100 * v / total_py, 1) if total_py > 0 else 0.0,
-                        "downloads": v
-                    }
-                    for cat, v in top_py
-                ],
-                "operating_systems": [
-                    {
-                        "os": normalize_os_name(cat),
-                        "percentage": round(100 * v / total_os, 1) if total_os > 0 else 0.0,
-                        "downloads": v
-                    }
-                    for cat, v in top_os
-                ]
-            }
-            
-            console.print(json_lib.dumps(output, indent=2))
+            output = service.get_json_output(package)
+            console.print(output)
         else:
-            # Formatted output mode
-            # Add upload_time to package_info for formatters
-            package_info_with_upload = {**package_info, "upload_time": upload_time}
-            format_package_info(package_info_with_upload, json_output=False)
-            format_download_stats(recent_stats, overall_stats, json_output=False)
-            format_python_versions(py_stats, json_output=False)
-            format_os_distribution(os_stats, json_output=False)
-            
+            service.get_formatted_output(package)
+
     except requests.exceptions.HTTPError as e:
         if e.response.status_code == 404:
-            console.print(f"[red]Error:[/red] Package '{package}' not found on PyPI")
-            raise typer.Exit(1)
+            console.print(f"[red]Error:[/red] Package '{package}' not found on PyPI.")
         else:
-            console.print(f"[red]Error:[/red] HTTP {e.response.status_code}: {e}")
-            raise typer.Exit(1)
+            console.print(f"[red]Error:[/red] HTTP {e.response.status_code}: {e.response.reason}")
+        raise typer.Exit(code=1)
     except Exception as e:
-        console.print(f"[red]Error:[/red] {e}")
-        raise typer.Exit(1)
+        console.print(f"[red]Unexpected error:[/red] {e}")
+        raise typer.Exit(code=1)
 
 
 @app.command()
 def clear_cache():
-    """Clear all cached data"""
+    """Clear all cached API responses."""
     client = PyPIClient()
     client.clear_cache()
-    console.print("[green]Cache cleared successfully[/green]")
+    console.print("[green]✓ Cache cleared successfully[/green]")
 
 
 @app.command()
 def cache_info():
-    """Show cache information"""
-    client = PyPIClient()
+    """Display information about the current cache."""
     cache_dir = get_cache_dir()
-    cache_size = client.get_cache_size()
-    
+    client = PyPIClient()  # Uses default TTL
+
+    size = client.get_cache_size()
+
     console.print(f"[cyan]Cache directory:[/cyan] {cache_dir / 'api_cache'}")
-    console.print(f"[cyan]Cache entries:[/cyan] {cache_size}")
+    console.print(f"[cyan]Entries:[/cyan] {size}")
+
     if client.cache_ttl == 0:
-        console.print(f"[cyan]Cache TTL:[/cyan] [red]Disabled[/red]")
+        console.print("[cyan]Cache TTL:[/cyan] [red]Disabled[/red]")
     else:
-        console.print(f"[cyan]Cache TTL:[/cyan] {client.cache_ttl} seconds ({client.cache_ttl / 3600:.1f} hours)")
+        hours = client.cache_ttl / 3600
+        console.print(f"[cyan]Cache TTL:[/cyan] {client.cache_ttl} seconds (~{hours:.1f} hours)")
 
 
 if __name__ == "__main__":
     app()
-
