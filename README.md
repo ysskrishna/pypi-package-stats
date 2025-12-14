@@ -14,26 +14,37 @@ A CLI for PyPI package stats and download analytics, built on the official pypis
 - **Download Statistics**: Last day, week, month, and 180-day download counts
 - **Python Version Breakdown**: Top 5 Python versions with download percentages (last 30 days)
 - **Operating System Distribution**: Top 4 operating systems with download percentages (last 30 days)
-- **JSON Output**: Optional JSON format for programmatic use
+- **Flexible Output**: Human-friendly Rich tables or machine-readable JSON
 - **Intelligent Caching**: Persistent disk cache with configurable TTL (default: 1 hour)
-- **Cache Management**: Clear cache and view cache information
-- **Rich Terminal Output**: Beautiful formatted tables using Rich library
+- **Cache Management**: Inspect cache usage or clear cached responses
 
-## Requirements
+---
 
-- Python 3.8+
-
-## Installation
-
-Install directly from PyPI:
+## Quick Start
 
 ```bash
 pip install pypi-package-stats
+pypi-package-stats package requests
 ```
+
+Get JSON output:
+
+```bash
+pypi-package-stats package requests --json
+```
+
+Disable cache for a single request:
+
+```bash
+pypi-package-stats package requests --no-cache
+```
+
+---
+
 
 ## Usage
 
-### Get package statistics
+### Fetch package statistics
 
 ```bash
 pypi-package-stats package <PACKAGE_NAME>
@@ -45,15 +56,19 @@ Example:
 pypi-package-stats package requests
 ```
 
-### JSON output
+> The `package` command is the primary command used to fetch metadata and download analytics for a PyPI package.
 
-Get output in JSON format:
+### JSON output
 
 ```bash
 pypi-package-stats package <PACKAGE_NAME> --json
 ```
 
-### Cache management
+This is useful for scripting, automation, or piping data into other tools.
+
+### Cache Management
+
+Caching significantly speeds up repeated queries and helps avoid API rate limits when exploring multiple packages.
 
 #### Disable caching
 
@@ -63,7 +78,7 @@ pypi-package-stats package <PACKAGE_NAME> --no-cache
 
 #### Custom cache TTL
 
-Set cache time-to-live in seconds (0 = disable):
+Set cache time-to-live in seconds (`0` disables caching):
 
 ```bash
 pypi-package-stats package <PACKAGE_NAME> --cache-ttl 7200
@@ -87,44 +102,34 @@ pypi-package-stats cache-info
 pypi-package-stats --help
 ```
 
-## Output
+---
 
-The tool displays:
+## Data Source & Rate Limiting
 
-1. **Package Information**
-   - Name and version
-   - Upload time
-   - Description
-   - Author
-   - License
-   - Home page
-   - PyPI URL
+This tool uses the [pypistats.org](https://pypistats.org/) API to fetch PyPI package statistics. The API has IP-based rate limiting:
 
-2. **Download Statistics** (excluding mirrors)
-   - Last day
-   - Last week
-   - Last month
-   - Last 180 days
+- **5 requests per second**
+- **30 requests per minute**
 
-3. **Top 5 Python Versions** (last 30 days)
-   - Version number
-   - Percentage of downloads
-   - Total downloads
+The built-in caching system helps minimize API calls and reduce the chance of hitting rate limits. If you encounter rate limit errors, wait a few seconds between requests if making multiple queries.
 
-4. **Top Operating Systems** (last 30 days)
-   - OS name
-   - Percentage of downloads
-   - Total downloads
+---
 
-## Caching
+## Limitations
 
-The tool uses persistent disk caching to reduce API calls and improve performance. Cache is stored in a platform-specific directory managed by the `platformdirs` library:
+* Python version and OS breakdowns are limited to the last 30 days
+* Data availability depends on the pypistats.org service
 
-- **macOS**: `~/Library/Caches/pypipackagestats/pypipackagestats/api_cache`
-- **Linux**: `~/.cache/pypipackagestats/pypipackagestats/api_cache`
-- **Windows**: `%LOCALAPPDATA%\pypipackagestats\pypipackagestats\api_cache`
+---
 
-Default cache TTL is 3600 seconds (1 hour). You can customize this or disable caching entirely.
+## Use Cases
+
+* Compare popularity of Python libraries
+* Track adoption trends of your own packages
+* Generate download statistics for reports or dashboards
+* Automate analytics workflows using JSON output
+
+---
 
 ## Contributing
 
