@@ -108,7 +108,7 @@ The tool displays:
    - Last month
    - Last 180 days
 
-3. **Top Python Versions** (last 30 days)
+3. **Top 5 Python Versions** (last 30 days)
    - Version number
    - Percentage of downloads
    - Total downloads
@@ -128,17 +128,6 @@ The tool uses persistent disk caching to reduce API calls and improve performanc
 
 Default cache TTL is 3600 seconds (1 hour). You can customize this or disable caching entirely.
 
-## License
-
-MIT License - see [LICENSE](LICENSE) file for details.
-
-## Author
-
-**Y. Siva Sai Krishna**
-
-- GitHub: [@ysskrishna](https://github.com/ysskrishna)
-- LinkedIn: [ysskrishna](https://linkedin.com/in/ysskrishna)
-
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
@@ -150,3 +139,16 @@ If you encounter any issues or have feature requests, please open an issue on [G
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for a detailed list of changes and version history.
+
+## License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+## Author
+
+**Y. Siva Sai Krishna**
+
+- GitHub: [@ysskrishna](https://github.com/ysskrishna)
+- LinkedIn: [ysskrishna](https://linkedin.com/in/ysskrishna)
+
+
