@@ -24,19 +24,19 @@ A CLI for PyPI package stats and download analytics, built on the official pypis
 
 ```bash
 pip install pypi-package-stats
-pypi-package-stats package requests
+pypi-package-stats package nestedutils
 ```
 
 Get JSON output:
 
 ```bash
-pypi-package-stats package requests --json
+pypi-package-stats package nestedutils --json
 ```
 
 Disable cache for a single request:
 
 ```bash
-pypi-package-stats package requests --no-cache
+pypi-package-stats package nestedutils --no-cache
 ```
 
 ### Example Output
@@ -56,7 +56,7 @@ pypi-package-stats package <PACKAGE_NAME>
 Example:
 
 ```bash
-pypi-package-stats package requests
+pypi-package-stats package nestedutils
 ```
 
 > The `package` command is the primary command used to fetch metadata and download analytics for a PyPI package.

@@ -33,7 +33,7 @@ uv run pypi-package-stats package <PACKAGE_NAME>
 Example:
 
 ```bash
-uv run pypi-package-stats package requests
+uv run pypi-package-stats package nestedutils
 ```
 
 ### JSON output
