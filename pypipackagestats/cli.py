@@ -15,7 +15,7 @@ console = Console()
 
 
 @app.command()
-def main(
+def package(
     package: str = typer.Argument(..., help="Package name to query"),
     json: bool = typer.Option(False, "--json", "-j", help="Output as JSON"),
     cache_ttl: int | None = typer.Option(
@@ -54,7 +54,7 @@ def main(
         raise typer.Exit(code=1)
 
 
-@app.command(name="cache-clear")
+@app.command()
 def cache_clear():
     """Clear all cached API responses."""
     client = PyPIClient()

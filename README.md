@@ -36,13 +36,13 @@ pip install pypi-package-stats
 ### Get package statistics
 
 ```bash
-pypi-package-stats <PACKAGE_NAME>
+pypi-package-stats package <PACKAGE_NAME>
 ```
 
 Example:
 
 ```bash
-pypi-package-stats requests
+pypi-package-stats package requests
 ```
 
 ### JSON output
@@ -50,9 +50,9 @@ pypi-package-stats requests
 Get output in JSON format:
 
 ```bash
-pypi-package-stats <PACKAGE_NAME> --json
+pypi-package-stats package <PACKAGE_NAME> --json
 # or
-pypi-package-stats <PACKAGE_NAME> -j
+pypi-package-stats package <PACKAGE_NAME> -j
 ```
 
 ### Cache management
@@ -60,7 +60,7 @@ pypi-package-stats <PACKAGE_NAME> -j
 #### Disable caching
 
 ```bash
-pypi-package-stats <PACKAGE_NAME> --no-cache
+pypi-package-stats package <PACKAGE_NAME> --no-cache
 ```
 
 #### Custom cache TTL
@@ -68,7 +68,7 @@ pypi-package-stats <PACKAGE_NAME> --no-cache
 Set cache time-to-live in seconds (0 = disable):
 
 ```bash
-pypi-package-stats <PACKAGE_NAME> --cache-ttl 7200
+pypi-package-stats package <PACKAGE_NAME> --cache-ttl 7200
 ```
 
 #### Clear cache
