@@ -77,12 +77,6 @@ def cache_info():
     console.print(f"[cyan]Cache directory:[/cyan] {cache_dir / 'api_cache'}")
     console.print(f"[cyan]Entries:[/cyan] {size}")
 
-    if client.cache_ttl == 0:
-        console.print("[cyan]Cache TTL:[/cyan] [red]Disabled[/red]")
-    else:
-        hours = client.cache_ttl / 3600
-        console.print(f"[cyan]Cache TTL:[/cyan] {client.cache_ttl} seconds (~{hours:.1f} hours)")
-
 
 if __name__ == "__main__":
     app()
