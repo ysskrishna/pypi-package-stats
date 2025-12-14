@@ -1,9 +1,45 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
 name = "pypi-package-stats"
-version = "0.1.0"
-description = "Comprehensive PyPI package information CLI tool"
+version = "1.0.0"
+description = "A comprehensive CLI tool to fetch detailed statistics and metadata for PyPI packages."
 readme = "README.md"
 requires-python = ">=3.8"
+authors = [
+  {name = "ysskrishna", email = "sivasaikrishnassk@gmail.com"}
+]
+license = {text = "MIT"}
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Utilities",
+]
+keywords = [
+    "pypi",
+    "package",
+    "statistics",
+    "cli",
+    "download-stats",
+    "python-packages",
+    "pypi-api",
+    "package-metadata",
+    "python-versions",
+    "os-distribution",
+    "typer",
+    "rich",
+]
 dependencies = [
     "typer>=0.9.0",
     "rich>=13.0.0",
@@ -16,9 +52,17 @@ dependencies = [
 [project.scripts]
 pypi-package-stats = "pypipackagestats.cli:app"
 
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+[project.urls]
+Homepage = "https://github.com/ysskrishna/pypi-package-stats"
+Documentation = "https://github.com/ysskrishna/pypi-package-stats#readme"
+Repository = "https://github.com/ysskrishna/pypi-package-stats.git"
+Issues = "https://github.com/ysskrishna/pypi-package-stats/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["pypipackagestats"]
+
+[tool.internalurls]
+author_username = "ysskrishna"
+author_name = "Y. Siva Sai Krishna"
+author_github = "https://github.com/ysskrishna"
+author_linkedin = "https://linkedin.com/in/ysskrishna"
