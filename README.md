@@ -51,8 +51,6 @@ Get output in JSON format:
 
 ```bash
 pypi-package-stats package <PACKAGE_NAME> --json
-# or
-pypi-package-stats package <PACKAGE_NAME> -j
 ```
 
 ### Cache management
@@ -138,7 +136,11 @@ If you encounter any issues or have feature requests, please open an issue on [G
 
 ## Changelog
 
-See [CHANGELOG.md](CHANGELOG.md) for a detailed list of changes and version history.
+See [CHANGELOG.md](https://github.com/ysskrishna/pypi-package-stats/blob/main/CHANGELOG.md) for a detailed list of changes and version history.
+
+## Releases
+
+For information on the release process and how to create new releases, see [RELEASE.md](https://github.com/ysskrishna/pypi-package-stats/blob/main/RELEASE.md).
 
 ## License
 
