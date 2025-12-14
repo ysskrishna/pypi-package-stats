@@ -55,7 +55,7 @@ dependencies = [
 ]
 
 [project.scripts]
-pypi-package-stats = "pypipackagestats.cli:app"
+pypi-package-stats = "pypipackagestats.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/ysskrishna/pypi-package-stats"

@@ -15,15 +15,6 @@ app = typer.Typer(
 console = Console()
 
 
-@app.callback(invoke_without_command=True)
-def main(ctx: typer.Context):
-    print_project_banner()
-    
-    if ctx.invoked_subcommand is None:
-        # This will show help since no_args_is_help=True
-        pass
-
-
 @app.command(no_args_is_help=True)
 def package(
     package: str = typer.Argument(..., help="Package name to query"),
@@ -78,5 +69,10 @@ def cache_info():
     console.print(f"[cyan]Entries:[/cyan] {size}")
 
 
-if __name__ == "__main__":
+def main():
+    print_project_banner()
     app()
+
+
+if __name__ == "__main__":
+    main()
