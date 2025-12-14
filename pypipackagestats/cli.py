@@ -41,11 +41,7 @@ def main(
     service = PackageStatsService(client)
 
     try:
-        if json:
-            output = service.get_json_output(package)
-            console.print(output)
-        else:
-            service.get_formatted_output(package)
+        service.display_package_stats(package, json)
 
     except requests.exceptions.HTTPError as e:
         if e.response.status_code == 404:

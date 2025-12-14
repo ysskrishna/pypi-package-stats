@@ -1,8 +1,6 @@
 import json
 from typing import Dict, Any
-
 from nestedutils import get_path
-
 from pypipackagestats.core.client import PyPIClient
 from pypipackagestats.output.utils import (
     get_upload_time,
@@ -15,6 +13,15 @@ from pypipackagestats.constants import (
     TOP_OS_COUNT,
     DATE_ISO_FORMAT_LENGTH,
 )
+from pypipackagestats.output.formatters import (
+    format_package_info,
+    format_download_stats,
+    format_python_versions,
+    format_os_distribution,
+)
+from rich.console import Console
+
+console = Console()
 
 
 class PackageStatsService:
@@ -117,23 +124,13 @@ class PackageStatsService:
             "operating_systems": operating_systems,
         }
 
-    def get_json_output(self, package: str) -> str:
-        """Return complete JSON representation"""
+
+    def display_package_stats(self, package: str, as_json: bool = False) -> None:
         data = self.get_processed_data(package)
-        return json.dumps(data, indent=2)
-
-    def get_formatted_output(self, package: str) -> None:
-        """Print Rich-formatted output using shared processed data"""
-        from pypipackagestats.output.formatters import (
-            format_package_info,
-            format_download_stats,
-            format_python_versions,
-            format_os_distribution,
-        )
-
-        data = self.get_processed_data(package)
-
-        format_package_info(data)
-        format_download_stats(data)
-        format_python_versions(data)
-        format_os_distribution(data)
+        if as_json:
+            console.print(json.dumps(data, indent=2))
+        else:
+            format_package_info(data)
+            format_download_stats(data)
+            format_python_versions(data)
+            format_os_distribution(data)
