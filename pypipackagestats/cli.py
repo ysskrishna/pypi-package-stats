@@ -5,14 +5,17 @@ from typing import Optional
 from rich.console import Console
 from nestedutils import get_path
 
-from pypipackagestats.api import PyPIClient
-from pypipackagestats.formatters import (
+from pypipackagestats.core.client import PyPIClient
+from pypipackagestats.output.formatters import (
     format_package_info,
     format_download_stats,
     format_python_versions,
     format_os_distribution,
 )
-from pypipackagestats.utils import get_last_30_days_data, aggregate_by_category, normalize_os_name, get_cache_dir, get_upload_time
+from pypipackagestats.data.processors import get_last_30_days_data, aggregate_by_category
+from pypipackagestats.data.extractors import get_upload_time
+from pypipackagestats.output.formatters import normalize_os_name
+from pypipackagestats.core.cache import get_cache_dir
 from pypipackagestats.constants import (
     DEFAULT_CACHE_TTL,
     TOP_PYTHON_VERSIONS_COUNT,

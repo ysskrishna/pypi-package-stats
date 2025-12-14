@@ -2,7 +2,7 @@ import requests
 import diskcache
 from typing import Optional
 from nestedutils import get_path
-from pypipackagestats.utils import get_cache_dir
+from pypipackagestats.core.cache import get_cache_dir
 from pypipackagestats.constants import DEFAULT_CACHE_TTL
 
 
