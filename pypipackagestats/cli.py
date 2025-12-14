@@ -12,9 +12,12 @@ from pypipackagestats.output.formatters import (
     format_python_versions,
     format_os_distribution,
 )
-from pypipackagestats.data.processors import get_last_30_days_data, aggregate_by_category
-from pypipackagestats.data.extractors import get_upload_time
-from pypipackagestats.output.formatters import normalize_os_name
+from pypipackagestats.output.utils import (
+    get_upload_time,
+    get_last_30_days_data,
+    aggregate_by_category,
+    normalize_os_name,
+)
 from pypipackagestats.core.cache import get_cache_dir
 from pypipackagestats.constants import (
     DEFAULT_CACHE_TTL,

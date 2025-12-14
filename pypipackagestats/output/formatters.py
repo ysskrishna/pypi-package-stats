@@ -5,7 +5,9 @@ from typing import Dict, Any
 import json
 from nestedutils import get_path
 
-from pypipackagestats.data.processors import (
+from pypipackagestats.output.utils import (
+    humanize_number,
+    normalize_os_name,
     get_last_30_days_data,
     aggregate_by_category,
 )
@@ -16,27 +18,6 @@ from pypipackagestats.constants import (
 )
 
 console = Console()
-
-
-def humanize_number(num: int) -> str:
-    """Convert large numbers to human-readable format (K, M, B)"""
-    for unit in ['', 'K', 'M', 'B']:
-        if abs(num) < 1000:
-            return f"{num:,.1f}{unit}".rstrip('0').rstrip('.')
-        num /= 1000
-    return f"{num:,.1f}T"
-
-
-def normalize_os_name(os_name: str) -> str:
-    """Normalize OS names for display"""
-    if not os_name:
-        return "other"
-    mapping = {
-        "darwin": "macOS",
-        "windows": "Windows",
-        "linux": "Linux"
-    }
-    return mapping.get(os_name.lower(), os_name.title())
 
 
 def format_package_info(info: Dict[str, Any], json_output: bool = False) -> str:
