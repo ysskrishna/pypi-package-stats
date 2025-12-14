@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "pypi-package-stats"
 version = "1.0.0"
-description = "A comprehensive CLI tool to fetch detailed statistics and metadata for PyPI packages."
+description = "A CLI for PyPI package stats and download analytics, built on the official pypistats API. Fetch daily, weekly, monthly, and 180-day downloads, Python version and OS breakdowns, package metadata, with flexible output (JSON or Rich console tables) and smart disk caching."
 readme = "README.md"
 requires-python = ">=3.8"
 authors = [
@@ -21,24 +21,28 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
-  "Development Status :: 4 - Beta",
+  "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Developers",
+  "Intended Audience :: System Administrators",
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Topic :: Utilities",
 ]
 keywords = [
     "pypi",
-    "package",
-    "statistics",
-    "cli",
+    "pypi-stats",
+    "pypi-downloads",
+    "package-stats",
+    "package-metrics",
     "download-stats",
-    "python-packages",
-    "pypi-api",
+    "pypistats",
     "package-metadata",
     "python-versions",
     "os-distribution",
-    "typer",
-    "rich",
+    "cli",
+    "pypi-api",
+    "download-analytics",
+    "package-analytics",
+    "disk-caching",
 ]
 dependencies = [
     "typer>=0.9.0",
