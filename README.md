@@ -138,7 +138,7 @@ The built-in caching system helps minimize API calls and reduce the chance of hi
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-For development setup and guidelines, see [DEVELOPMENT.md](https://github.com/ysskrishna/pypi-package-stats/blob/main/DEVELOPMENT.md).
+For development setup and guidelines, see [CONTRIBUTING.md](https://github.com/ysskrishna/pypi-package-stats/blob/main/CONTRIBUTING.md).
 
 ## Issues
 
