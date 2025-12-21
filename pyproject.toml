@@ -60,7 +60,7 @@ pypi-package-stats = "pypipackagestats.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/ysskrishna/pypi-package-stats"
-Documentation = "https://github.com/ysskrishna/pypi-package-stats#readme"
+Documentation = "https://ysskrishna.github.io/pypi-package-stats/"
 Repository = "https://github.com/ysskrishna/pypi-package-stats.git"
 Issues = "https://github.com/ysskrishna/pypi-package-stats/issues"
 
@@ -72,3 +72,11 @@ author_username = "ysskrishna"
 author_name = "Y. Siva Sai Krishna"
 author_github = "https://github.com/ysskrishna"
 author_linkedin = "https://linkedin.com/in/ysskrishna"
+
+[dependency-groups]
+dev = [
+    "mkdocs>=1.6.1",
+    "mkdocs-material>=9.7.1",
+    "mkdocstrings>=0.26.1",
+    "mkdocstrings-python>=1.11.1",
+]

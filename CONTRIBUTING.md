@@ -8,7 +8,6 @@ Thank you for your interest in contributing to `pypi-package-stats`! This guide 
 - [Getting Started](#getting-started)
 - [Development Setup](#development-setup)
 - [Making Changes](#making-changes)
-- [Testing](#testing)
 - [Submitting Changes](#submitting-changes)
 - [Code Style](#code-style)
 - [Building the Package](#building-the-package)

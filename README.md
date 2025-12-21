@@ -154,7 +154,7 @@ For information on the release process and how to create new releases, see [RELE
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) file for details.
+MIT License - see [LICENSE](https://github.com/ysskrishna/pypi-package-stats/blob/main/LICENSE) file for details.
 
 ## Author
 
