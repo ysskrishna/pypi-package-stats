@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0]
+
+### Added
+
+- MkDocs documentation site with GitHub Pages deployment
+- GitHub Actions workflow for automated documentation deployment
+- Refactored CONTRIBUTING.md with comprehensive contribution guidelines
+- Documentation site accessible at https://ysskrishna.github.io/pypi-package-stats/
+
+### Changed
+
+- Updated nestedutils dependency to v1.1.2
+- Improved package keywords for better discoverability on PyPI
+- Updated documentation URL in pyproject.toml to point to GitHub Pages
+- Enhanced README with documentation badge and improved structure
+
 ## [1.1.0]
 
 ### Added
@@ -49,6 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for Python 3.8+
 
 
+[1.2.0]: https://github.com/ysskrishna/pypi-package-stats/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/ysskrishna/pypi-package-stats/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/ysskrishna/pypi-package-stats/releases/tag/v1.0.0
 
