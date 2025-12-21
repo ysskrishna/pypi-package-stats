@@ -1,6 +1,6 @@
 import json
 from typing import Dict, Any
-from nestedutils import get_path
+from nestedutils import get_at
 from pypipackagestats.core.client import PyPIClient
 from pypipackagestats.output.utils import (
     get_upload_time,
@@ -31,7 +31,7 @@ class PackageStatsService:
 
     def extract_data(self, package: str) -> Dict[str, Any]:
         pkg_data = self.client.get_package_info(package)
-        package_info = get_path(pkg_data, "info", default={})
+        package_info = get_at(pkg_data, "info", default={})
         upload_time = get_upload_time(pkg_data)
 
         recent_stats = self.client.get_recent_stats(package)
@@ -56,7 +56,7 @@ class PackageStatsService:
         raw = self.extract_data(package)
 
         # Totals
-        total_180d = sum(get_path(d, "downloads", default=0) for d in raw["overall_stats"])
+        total_180d = sum(get_at(d, "downloads", default=0) for d in raw["overall_stats"])
 
         # Python versions (last 30 days)
         py_last30 = get_last_30_days_data(raw["py_stats"])
@@ -92,26 +92,26 @@ class PackageStatsService:
 
         # Handle project_urls - try different paths
         home_page = (
-            get_path(info, "home_page")
-            or get_path(info, "project_url")
-            or get_path(info, ["project_urls", "Homepage"])
+            get_at(info, "home_page")
+            or get_at(info, "project_url")
+            or get_at(info, ["project_urls", "Homepage"])
         )
 
         package_metadata = {
-            "name": get_path(info, "name"),
-            "version": get_path(info, "version"),
+            "name": get_at(info, "name"),
+            "version": get_at(info, "version"),
             "upload_time": upload_time_str,
-            "description": get_path(info, "summary"),
-            "author": get_path(info, "author") or get_path(info, "author_email"),
-            "license": get_path(info, "license"),
+            "description": get_at(info, "summary"),
+            "author": get_at(info, "author") or get_at(info, "author_email"),
+            "license": get_at(info, "license"),
             "home_page": home_page,
-            "pypi_url": get_path(info, "package_url"),
+            "pypi_url": get_at(info, "package_url"),
         }
 
         downloads = {
-            "last_day": get_path(raw["recent_stats"], "last_day", default=0),
-            "last_week": get_path(raw["recent_stats"], "last_week", default=0),
-            "last_month": get_path(raw["recent_stats"], "last_month", default=0),
+            "last_day": get_at(raw["recent_stats"], "last_day", default=0),
+            "last_week": get_at(raw["recent_stats"], "last_week", default=0),
+            "last_month": get_at(raw["recent_stats"], "last_month", default=0),
             "last_180d": total_180d,
         }
 

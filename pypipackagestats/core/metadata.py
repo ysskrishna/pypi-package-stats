@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 from typing import Dict, Any, Optional
 from pypipackagestats.core.models import ProjectMetadata
-from nestedutils import get_path
+from nestedutils import get_at
 
 try:
     if sys.version_info >= (3, 11):
@@ -42,11 +42,11 @@ def get_project_metadata() -> ProjectMetadata:
     
     # Cache the result
     _cached_metadata = ProjectMetadata(
-        name=get_path(data, "project.name", ""),
-        version=get_path(data, "project.version", ""),
-        repository_url=get_path(data, "project.urls.Repository", ""),
-        author=get_path(data, "tool.internalurls.author_name", ""),
-        author_url=get_path(data, "tool.internalurls.author_linkedin", "")
+        name=get_at(data, "project.name", ""),
+        version=get_at(data, "project.version", ""),
+        repository_url=get_at(data, "project.urls.Repository", ""),
+        author=get_at(data, "tool.internalurls.author_name", ""),
+        author_url=get_at(data, "tool.internalurls.author_linkedin", "")
     )
     
     return _cached_metadata

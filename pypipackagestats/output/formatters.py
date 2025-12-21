@@ -8,43 +8,43 @@ from pypipackagestats.core.metadata import get_project_metadata
 from pypipackagestats.output.utils import normalize_os_name
 from pypipackagestats.output.utils import humanize_number
 from pypipackagestats.output.utils import humanize_date
-from nestedutils import get_path
+from nestedutils import get_at
 
 
 console = Console()
 
 
 def format_package_info(data: Dict[str, Any]) -> None:
-    pkg = get_path(data, "package")
+    pkg = get_at(data, "package")
 
-    console.print(f"\n[bold cyan]{get_path(pkg, 'name')}[/bold cyan]")
-    console.print(f"{get_path(pkg, 'description')}")
-    console.print(f"Version     : {get_path(pkg, 'version', default='Unknown')}")
-    console.print(f"Upload time : {humanize_date(get_path(pkg, 'upload_time')) or 'Unknown'}")
-    console.print(f"Author      : {get_path(pkg, 'author', default='Unknown')}")
-    console.print(f"License     : {get_path(pkg, 'license', default='Unknown')}")
-    console.print(f"Home page   : {get_path(pkg, 'home_page', default='Unknown')}")
-    console.print(f"PyPI        : {get_path(pkg, 'pypi_url', default='Unknown')}\n")
+    console.print(f"\n[bold cyan]{get_at(pkg, 'name')}[/bold cyan]")
+    console.print(f"{get_at(pkg, 'description')}")
+    console.print(f"Version     : {get_at(pkg, 'version', default='Unknown')}")
+    console.print(f"Upload time : {humanize_date(get_at(pkg, 'upload_time')) or 'Unknown'}")
+    console.print(f"Author      : {get_at(pkg, 'author', default='Unknown')}")
+    console.print(f"License     : {get_at(pkg, 'license', default='Unknown')}")
+    console.print(f"Home page   : {get_at(pkg, 'home_page', default='Unknown')}")
+    console.print(f"PyPI        : {get_at(pkg, 'pypi_url', default='Unknown')}\n")
 
 
 def format_download_stats(data: Dict[str, Any]) -> None:
-    dl = get_path(data, "downloads")
+    dl = get_at(data, "downloads")
 
     table = Table(title="Downloads (excluding mirrors)", box=box.ROUNDED)
     table.add_column("Period", style="cyan")
     table.add_column("Downloads", style="green", justify="right")
 
-    table.add_row("Last day", humanize_number(get_path(dl, "last_day", default=0)))
-    table.add_row("Last week", humanize_number(get_path(dl, "last_week", default=0)))
-    table.add_row("Last month", humanize_number(get_path(dl, "last_month", default=0)))
-    table.add_row("Last 180 days", humanize_number(get_path(dl, "last_180d", default=0)))
+    table.add_row("Last day", humanize_number(get_at(dl, "last_day", default=0)))
+    table.add_row("Last week", humanize_number(get_at(dl, "last_week", default=0)))
+    table.add_row("Last month", humanize_number(get_at(dl, "last_month", default=0)))
+    table.add_row("Last 180 days", humanize_number(get_at(dl, "last_180d", default=0)))
 
     console.print(table)
     console.print()
 
 
 def format_python_versions(data: Dict[str, Any]) -> None:
-    versions = get_path(data, "python_versions")
+    versions = get_at(data, "python_versions")
 
     if not versions:
         console.print("[yellow]No Python version data available for last 30 days.[/yellow]\n")
@@ -56,11 +56,11 @@ def format_python_versions(data: Dict[str, Any]) -> None:
     table.add_column("Downloads", style="green", justify="right")
 
     for item in versions:
-        version = get_path(item, "version") if get_path(item, "version") != "null" else "Unknown"
+        version = get_at(item, "version") if get_at(item, "version") != "null" else "Unknown"
         table.add_row(
             version,
-            f"{get_path(item, 'percentage', default=0):.1f}%",
-            humanize_number(get_path(item, "downloads", default=0))
+            f"{get_at(item, 'percentage', default=0):.1f}%",
+            humanize_number(get_at(item, "downloads", default=0))
         )
 
     console.print(table)
@@ -68,7 +68,7 @@ def format_python_versions(data: Dict[str, Any]) -> None:
 
 
 def format_os_distribution(data: Dict[str, Any]) -> None:
-    systems = get_path(data, "operating_systems")
+    systems = get_at(data, "operating_systems")
 
     if not systems:
         console.print("[yellow]No OS distribution data available for last 30 days.[/yellow]")
@@ -81,9 +81,9 @@ def format_os_distribution(data: Dict[str, Any]) -> None:
 
     for item in systems:
         table.add_row(
-            normalize_os_name(get_path(item, "os")),
-            f"{get_path(item, 'percentage', default=0):.1f}%",
-            humanize_number(get_path(item, "downloads", default=0))
+            normalize_os_name(get_at(item, "os")),
+            f"{get_at(item, 'percentage', default=0):.1f}%",
+            humanize_number(get_at(item, "downloads", default=0))
         )
 
     console.print(table)

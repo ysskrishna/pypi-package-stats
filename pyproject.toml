@@ -51,7 +51,7 @@ dependencies = [
     "requests>=2.31.0",
     "diskcache>=5.6.0",
     "platformdirs>=3.0.0",
-    "nestedutils==1.0.1",
+    "nestedutils==1.1.2",
     "tomli>=2.1.0; python_version < '3.11'",
 ]
 

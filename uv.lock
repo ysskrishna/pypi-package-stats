@@ -236,11 +236,11 @@ wheels = [
 
 [[package]]
 name = "nestedutils"
-version = "1.0.1"
+version = "1.1.2"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/ed/d5/6e0fec615aabe4173c85af6a184087fb1bce5daf9df8fb7bb8b55b8a2f94/nestedutils-1.0.1.tar.gz", hash = "sha256:cf393a2a96a320908489c8cc57e8176acc67f3fd123b2e5b1459da6b045c708e", size = 361367, upload-time = "2025-12-07T06:10:34.575Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/bf/db/c306397161c86d997fbea2e9ff25536f776156aace8ebd369fcbcccaea9c/nestedutils-1.1.2.tar.gz", hash = "sha256:4ebfd9a8fa6cecaa33ce57ee15ad7520a30bf715201c92e6014e341ca38475b9", size = 423826, upload-time = "2025-12-21T07:55:41.177Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e0/c6/fa9cae16b7eb5ca340d4bdb0d5bd1a79356b95efc12a3190cf360cd18a21/nestedutils-1.0.1-py3-none-any.whl", hash = "sha256:91ca096361b032f83908a081e971beeea66b1e24b4c4f6d2316b28a4e0113d40", size = 8051, upload-time = "2025-12-07T06:10:33.231Z" },
+    { url = "https://files.pythonhosted.org/packages/98/d9/1b76ef4d5ff0b837eaec46e8d1389d05331f81208f396c9ce1c185b94604/nestedutils-1.1.2-py3-none-any.whl", hash = "sha256:94abf908e75670406d56c37da2d8c2ac92aa22073648a7016f62c893dfbe87cb", size = 12691, upload-time = "2025-12-21T07:55:42.374Z" },
 ]
 
 [[package]]
@@ -290,7 +290,7 @@ wheels = [
 
 [[package]]
 name = "pypi-package-stats"
-version = "1.0.0"
+version = "1.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "diskcache" },
@@ -308,7 +308,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "diskcache", specifier = ">=5.6.0" },
-    { name = "nestedutils", specifier = "==1.0.1" },
+    { name = "nestedutils", specifier = "==1.1.2" },
     { name = "platformdirs", specifier = ">=3.0.0" },
     { name = "requests", specifier = ">=2.31.0" },
     { name = "rich", specifier = ">=13.0.0" },
