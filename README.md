@@ -3,6 +3,7 @@
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)
 [![PyPI](https://img.shields.io/pypi/v/pypi-package-stats)](https://pypi.org/project/pypi-package-stats/)
+[![Documentation](https://img.shields.io/badge/docs-ysskrishna.github.io%2Fpypi--package--stats-blue.svg)](https://ysskrishna.github.io/pypi-package-stats/)
 
 A CLI for PyPI package stats and download analytics, built on the official pypistats API. Fetch daily, weekly, monthly, and 180-day downloads, Python version and OS breakdowns, package metadata, with flexible output (JSON or Rich console tables) and smart disk caching.
 
@@ -155,6 +156,23 @@ For information on the release process and how to create new releases, see [RELE
 ## License
 
 MIT License - see [LICENSE](https://github.com/ysskrishna/pypi-package-stats/blob/main/LICENSE) file for details.
+
+## Support
+
+If you find this library useful, please consider:
+
+- ⭐ **Starring** the repository on GitHub to help others discover it.
+- 💖 **Sponsoring** to support ongoing maintenance and development.
+
+[Become a Sponsor on GitHub](https://github.com/sponsors/ysskrishna) | [Support on Patreon](https://patreon.com/ysskrishna)
+
+## Links
+
+- **Documentation**: [ysskrishna.github.io/pypi-package-stats](https://ysskrishna.github.io/pypi-package-stats/)
+- **PyPI**: [pypi.org/project/pypi-package-stats](https://pypi.org/project/pypi-package-stats/)
+- **Homepage**: [github.com/ysskrishna/pypi-package-stats](https://github.com/ysskrishna/pypi-package-stats)
+- **Repository**: [github.com/ysskrishna/pypi-package-stats.git](https://github.com/ysskrishna/pypi-package-stats.git)
+- **Issues**: [github.com/ysskrishna/pypi-package-stats/issues](https://github.com/ysskrishna/pypi-package-stats/issues)
 
 ## Author
 
