@@ -73,6 +73,10 @@ The built-in caching system helps minimize API calls and reduce the chance of hi
 * Generate download statistics for reports or dashboards
 * Automate analytics workflows using JSON output
 
+## Roadmap
+
+- [ ] Add comprehensive test suite
+- [ ] Refactor code to import as module and use as a library
 
 ## Links
 

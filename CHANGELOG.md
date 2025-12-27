@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.2]
+
+### Added
+
+- Google Search Console verification meta tag for improved SEO tracking
+- Comprehensive keywords list in mkdocs.yml for better search engine discoverability
+- Open Graph image metadata for enhanced social media sharing
+- Structured metadata (description, keywords, author info) to documentation pages (CHANGELOG.md, CONTRIBUTING.md, LICENSE.md, index.md)
+- `extract_repo_name` utility function supporting GitHub, GitLab, and Bitbucket URL parsing
+
+### Changed
+
+- Redesigned CLI welcome banner with compact 2-line Unicode block style (replacing large ASCII art)
+- Banner title now dynamically displays repository name (e.g., "owner/repo") instead of static "Welcome" text
+- Streamlined README.md by removing verbose sections and reorganizing content into concise tables
+- Updated example output image with new banner design
+
+
 ## [1.3.1]
 
 ### Fixed
@@ -87,6 +105,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rich terminal output with formatted tables
 - Support for Python 3.8+
 
+[1.3.2]: https://github.com/ysskrishna/pypi-package-stats/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/ysskrishna/pypi-package-stats/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/ysskrishna/pypi-package-stats/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/ysskrishna/pypi-package-stats/compare/v1.1.0...v1.2.0
