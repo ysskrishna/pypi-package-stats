@@ -18,7 +18,7 @@ A CLI for PyPI package stats and download analytics, built on the official pypis
 - **Python Version Breakdown**: Top 5 Python versions with download percentages (last 30 days)
 - **Operating System Distribution**: Top 4 operating systems with download percentages (last 30 days)
 - **Flexible Output**: Human-friendly Rich tables or machine-readable JSON
-- **Intelligent Caching**: Persistent disk cache with configurable TTL (default: 1 hour)
+- **Smart Disk Caching**: Persistent disk cache with configurable TTL (default: 1 hour)
 - **Cache Management**: Inspect cache usage or clear cached responses
 
 ## Quick Start
@@ -106,10 +106,7 @@ pypi-package-stats --help
 
 ## Data Source & Rate Limiting
 
-This tool uses the [pypistats](https://pypistats.org/) API to fetch PyPI package statistics. The API has IP-based rate limiting:
-
-- **5 requests per second**
-- **30 requests per minute**
+This tool uses the [pypistats](https://pypistats.org/) API to fetch PyPI package statistics. The API enforces IP-based rate limits (for example, ~5 requests/sec and ~30 requests/min at the time of writing). These limits are set by pypistats.org and may change over time.
 
 The built-in caching system helps minimize API calls and reduce the chance of hitting rate limits. If you encounter rate limit errors, wait a few seconds between requests if making multiple queries.
 
@@ -149,7 +146,6 @@ If you find this library useful, please consider:
 
 - **PyPI Package**: [pypi.org/project/pypi-package-stats](https://pypi.org/project/pypi-package-stats/)
 - **Documentation**: [ysskrishna.github.io/pypi-package-stats](https://ysskrishna.github.io/pypi-package-stats/)
-- **Homepage**: [github.com/ysskrishna/pypi-package-stats](https://github.com/ysskrishna/pypi-package-stats)
 - **Repository**: [github.com/ysskrishna/pypi-package-stats.git](https://github.com/ysskrishna/pypi-package-stats.git)
 - **Issues**: [github.com/ysskrishna/pypi-package-stats/issues](https://github.com/ysskrishna/pypi-package-stats/issues)
 - **Changelog**: [github.com/ysskrishna/pypi-package-stats/blob/main/CHANGELOG.md](https://github.com/ysskrishna/pypi-package-stats/blob/main/CHANGELOG.md)
