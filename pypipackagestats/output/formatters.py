@@ -5,9 +5,7 @@ from rich.panel import Panel
 from rich import box
 from typing import Dict, Any
 from pypipackagestats.core.metadata import get_project_metadata
-from pypipackagestats.output.utils import normalize_os_name
-from pypipackagestats.output.utils import humanize_number
-from pypipackagestats.output.utils import humanize_date
+from pypipackagestats.output.utils import normalize_os_name, humanize_number, humanize_date, extract_repo_name
 from nestedutils import get_at
 
 
@@ -89,30 +87,7 @@ def format_os_distribution(data: Dict[str, Any]) -> None:
     console.print(table)
 
 
-def extract_repo_name(repository_url: str) -> str:
-    """Extract repo name from URL (e.g., "https://github.com/owner/repo.git" -> "owner/repo").
-    
-    Args:
-        repository_url: The full repository URL
-        
-    Returns:
-        The extracted repo name in format "owner/repo", or empty string if extraction fails
-    """
-    if not repository_url:
-        return ""
-    
-    # Remove .git suffix if present
-    repo_name = repository_url.rstrip('.git')
-    
-    # Extract owner/repo from URL
-    if 'github.com/' in repo_name:
-        repo_name = repo_name.split('github.com/')[-1]
-    elif 'gitlab.com/' in repo_name:
-        repo_name = repo_name.split('gitlab.com/')[-1]
-    elif 'bitbucket.org/' in repo_name:
-        repo_name = repo_name.split('bitbucket.org/')[-1]
-    
-    return repo_name
+
 
 
 def print_project_banner():

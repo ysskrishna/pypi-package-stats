@@ -67,3 +67,29 @@ def humanize_date(date_str: str) -> str:
     except (ValueError, TypeError):
         # If parsing fails, return the original string
         return date_str
+
+
+def extract_repo_name(repository_url: str) -> str:
+    """Extract repo name from URL (e.g., "https://github.com/owner/repo.git" -> "owner/repo").
+    
+    Args:
+        repository_url: The full repository URL
+        
+    Returns:
+        The extracted repo name in format "owner/repo", or empty string if extraction fails
+    """
+    if not repository_url:
+        return ""
+    
+    # Remove .git suffix if present
+    repo_name = repository_url.rstrip('.git')
+    
+    # Extract owner/repo from URL
+    if 'github.com/' in repo_name:
+        repo_name = repo_name.split('github.com/')[-1]
+    elif 'gitlab.com/' in repo_name:
+        repo_name = repo_name.split('gitlab.com/')[-1]
+    elif 'bitbucket.org/' in repo_name:
+        repo_name = repo_name.split('bitbucket.org/')[-1]
+    
+    return repo_name
