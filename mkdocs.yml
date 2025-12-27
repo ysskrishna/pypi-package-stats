@@ -45,6 +45,42 @@ markdown_extensions:
       base_path: .
 
 extra:
+  google_site_verification: ICfb1XMVpLJZcn7JdUoaUsNZ-0D8LH1uztDuFd0VNfM
+  og_image: https://raw.githubusercontent.com/ysskrishna/pypi-package-stats/main/media/og.png
+  keywords:
+    - pypi
+    - pypi-stats
+    - pypi-downloads
+    - package-stats
+    - package-metrics
+    - download-stats
+    - pypistats
+    - package-metadata
+    - package-info
+    - pypi-package-info
+    - package-downloads
+    - package-analytics
+    - cli
+    - pypi-api
+    - caching
+    - json
+    - Python CLI
+    - PyPI statistics
+    - package analytics
+    - download statistics
+    - Python package info
+    - package metrics
+    - Python version breakdown
+    - OS distribution
+    - Rich console tables
+    - disk caching
+    - open source
+    - API reference
+    - contribution guide
+    - changelog
+    - version history
+    - MIT license
+    - ysskrishna
   social:
     - icon: fontawesome/brands/python
       link: https://pypi.org/project/pypi-package-stats/
