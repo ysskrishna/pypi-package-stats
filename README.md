@@ -6,9 +6,10 @@
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/pypi-package-stats?period=total&units=INTERNATIONAL_SYSTEM&left_color=GREY&right_color=BLUE&left_text=downloads)](https://pepy.tech/projects/pypi-package-stats)
 [![Documentation](https://img.shields.io/badge/docs-ysskrishna.github.io%2Fpypi--package--stats-blue.svg)](https://ysskrishna.github.io/pypi-package-stats/)
 
+![OG Image](https://raw.githubusercontent.com/ysskrishna/pypi-package-stats/main/media/og.png)
+
 A CLI for PyPI package stats and download analytics, built on the official pypistats API. Fetch daily, weekly, monthly, and 180-day downloads, Python version and OS breakdowns, package metadata, with flexible output (JSON or Rich console tables) and smart disk caching.
 
-![OG Image](https://raw.githubusercontent.com/ysskrishna/pypi-package-stats/main/media/og.png)
 
 ## Features
 
@@ -19,8 +20,6 @@ A CLI for PyPI package stats and download analytics, built on the official pypis
 - **Flexible Output**: Human-friendly Rich tables or machine-readable JSON
 - **Intelligent Caching**: Persistent disk cache with configurable TTL (default: 1 hour)
 - **Cache Management**: Inspect cache usage or clear cached responses
-
----
 
 ## Quick Start
 
@@ -44,8 +43,6 @@ pypi-package-stats package nestedutils --no-cache
 ### Example Output
 
 ![Example Output](https://raw.githubusercontent.com/ysskrishna/pypi-package-stats/main/media/example_output.png)
-
----
 
 ## Usage
 
@@ -107,25 +104,19 @@ pypi-package-stats cache-info
 pypi-package-stats --help
 ```
 
----
-
 ## Data Source & Rate Limiting
 
-This tool uses the [pypistats.org](https://pypistats.org/) API to fetch PyPI package statistics. The API has IP-based rate limiting:
+This tool uses the [pypistats](https://pypistats.org/) API to fetch PyPI package statistics. The API has IP-based rate limiting:
 
 - **5 requests per second**
 - **30 requests per minute**
 
 The built-in caching system helps minimize API calls and reduce the chance of hitting rate limits. If you encounter rate limit errors, wait a few seconds between requests if making multiple queries.
 
----
-
 ## Limitations
 
 * Python version and OS breakdowns are limited to the last 30 days
-* Data availability depends on the pypistats.org service
-
----
+* Data availability depends on the [pypistats](https://pypistats.org/) service
 
 ## Use Cases
 
@@ -134,25 +125,12 @@ The built-in caching system helps minimize API calls and reduce the chance of hi
 * Generate download statistics for reports or dashboards
 * Automate analytics workflows using JSON output
 
----
-
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
 For development setup and guidelines, see [CONTRIBUTING.md](https://github.com/ysskrishna/pypi-package-stats/blob/main/CONTRIBUTING.md).
 
-## Issues
-
-If you encounter any issues or have feature requests, please open an issue on [GitHub](https://github.com/ysskrishna/pypi-package-stats/issues).
-
-## Changelog
-
-See [CHANGELOG.md](https://github.com/ysskrishna/pypi-package-stats/blob/main/CHANGELOG.md) for a detailed list of changes and version history.
-
-## Releases
-
-For information on the release process and how to create new releases, see [RELEASE.md](https://github.com/ysskrishna/pypi-package-stats/blob/main/RELEASE.md).
 
 ## License
 
@@ -169,11 +147,13 @@ If you find this library useful, please consider:
 
 ## Links
 
+- **PyPI Package**: [pypi.org/project/pypi-package-stats](https://pypi.org/project/pypi-package-stats/)
 - **Documentation**: [ysskrishna.github.io/pypi-package-stats](https://ysskrishna.github.io/pypi-package-stats/)
-- **PyPI**: [pypi.org/project/pypi-package-stats](https://pypi.org/project/pypi-package-stats/)
 - **Homepage**: [github.com/ysskrishna/pypi-package-stats](https://github.com/ysskrishna/pypi-package-stats)
 - **Repository**: [github.com/ysskrishna/pypi-package-stats.git](https://github.com/ysskrishna/pypi-package-stats.git)
 - **Issues**: [github.com/ysskrishna/pypi-package-stats/issues](https://github.com/ysskrishna/pypi-package-stats/issues)
+- **Changelog**: [github.com/ysskrishna/pypi-package-stats/blob/main/CHANGELOG.md](https://github.com/ysskrishna/pypi-package-stats/blob/main/CHANGELOG.md)
+- **Releases**: [github.com/ysskrishna/pypi-package-stats/releases](https://github.com/ysskrishna/pypi-package-stats/releases)
 
 ## Author
 
