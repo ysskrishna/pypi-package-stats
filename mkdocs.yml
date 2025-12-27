@@ -45,7 +45,7 @@ markdown_extensions:
       base_path: .
 
 extra:
-  google_site_verification: ICfb1XMVpLJZcn7JdUoaUsNZ-0D8LH1uztDuFd0VNfM
+  google_site_verification: "ICfb1XMVpLJZcn7JdUoaUsNZ-0D8LH1uztDuFd0VNfM"
   og_image: https://raw.githubusercontent.com/ysskrishna/pypi-package-stats/main/media/og.png
   keywords:
     - pypi
