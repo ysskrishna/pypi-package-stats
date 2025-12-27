@@ -2,18 +2,6 @@
 
 Thank you for your interest in contributing to `pypi-package-stats`! This guide will help you get started with development and understand how to contribute effectively.
 
-## Table of Contents
-
-- [Code of Conduct](#code-of-conduct)
-- [Getting Started](#getting-started)
-- [Development Setup](#development-setup)
-- [Making Changes](#making-changes)
-- [Submitting Changes](#submitting-changes)
-- [Code Style](#code-style)
-- [Building the Package](#building-the-package)
-- [Development Usage](#development-usage)
-- [Additional Resources](#additional-resources)
-
 ## Code of Conduct
 
 This project adheres to a code of conduct that all contributors are expected to follow. Please be respectful, inclusive, and constructive in all interactions.

@@ -28,6 +28,7 @@ plugins:
             merge_init_into_class: true
 theme:
   name: material
+  custom_dir: docs/theme/overrides
   locale: en
   features:
     - navigation.top
