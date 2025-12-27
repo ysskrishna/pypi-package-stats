@@ -48,7 +48,6 @@ extra:
   social:
     - icon: fontawesome/brands/python
       link: https://pypi.org/project/pypi-package-stats/
-
     - icon: fontawesome/solid/external-link
       link: https://ysskrishna.vercel.app
     - icon: fontawesome/brands/github

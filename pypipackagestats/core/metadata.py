@@ -1,3 +1,4 @@
+import os
 import sys
 from pathlib import Path
 from typing import Dict, Any, Optional
@@ -12,23 +13,18 @@ try:
 except ImportError:
     raise ImportError("tomli is required for Python < 3.11")
 
-PYPROJECT_PATH = Path("pyproject.toml")
 
 # Module-level cache for project metadata
 _cached_metadata: Optional[ProjectMetadata] = None
 
-
-def _parse_pyproject(path: Path) -> Dict[str, Any]:
+def get_resource_path(relative_path):
     try:
-        with path.open("rb") as f:
-            return tomllib.load(f)
-    except FileNotFoundError:
-        raise FileNotFoundError(f"{path} not found.")
-    except tomllib.TOMLDecodeError as e:
-        raise ValueError(f"Error parsing TOML: {e}")
-    except Exception as e:
-        raise Exception(f"Unexpected error reading {path}: {e}")
-
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+    
+    return os.path.join(base_path, relative_path)
 
 def get_project_metadata() -> ProjectMetadata:
     global _cached_metadata
@@ -37,8 +33,10 @@ def get_project_metadata() -> ProjectMetadata:
     if _cached_metadata is not None:
         return _cached_metadata
     
-    # Read and parse the file only once
-    data = _parse_pyproject(PYPROJECT_PATH)
+    toml_path = get_resource_path("pyproject.toml")
+    data = {}
+    with open(toml_path, "rb") as f:
+        data = tomllib.load(f)
     
     # Cache the result
     _cached_metadata = ProjectMetadata(
