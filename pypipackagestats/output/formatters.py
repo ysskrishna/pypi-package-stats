@@ -89,22 +89,43 @@ def format_os_distribution(data: Dict[str, Any]) -> None:
     console.print(table)
 
 
+def extract_repo_name(repository_url: str) -> str:
+    """Extract repo name from URL (e.g., "https://github.com/owner/repo.git" -> "owner/repo").
+    
+    Args:
+        repository_url: The full repository URL
+        
+    Returns:
+        The extracted repo name in format "owner/repo", or empty string if extraction fails
+    """
+    if not repository_url:
+        return ""
+    
+    # Remove .git suffix if present
+    repo_name = repository_url.rstrip('.git')
+    
+    # Extract owner/repo from URL
+    if 'github.com/' in repo_name:
+        repo_name = repo_name.split('github.com/')[-1]
+    elif 'gitlab.com/' in repo_name:
+        repo_name = repo_name.split('gitlab.com/')[-1]
+    elif 'bitbucket.org/' in repo_name:
+        repo_name = repo_name.split('bitbucket.org/')[-1]
+    
+    return repo_name
+
+
 def print_project_banner():
     banner_text = Text()
     project_metadata = get_project_metadata()
     
-    # ASCII art for "PYPI STATS"
-    banner_text.append("\n  _____       _____ _____   _____           _                       _____ _        _       ", style="bold blue")
-    banner_text.append("\n |  __ \\     |  __ \\_   _| |  __ \\         | |                     / ____| |      | |      ", style="bold blue")
-    banner_text.append("\n | |__) |   _| |__) || |   | |__) |_ _  ___| | ____ _  __ _  ___  | (___ | |_ __ _| |_ ___ ", style="bold blue")
-    banner_text.append("\n |  ___/ | | |  ___/ | |   |  ___/ _` |/ __| |/ / _` |/ _` |/ _ \\  \\___ \\| __/ _` | __/ __|", style="bold blue")
-    banner_text.append("\n | |   | |_| | |    _| |_  | |  | (_| | (__|   < (_| | (_| |  __/  ____) | || (_| | |_\\__ \\", style="bold blue")
-    banner_text.append("\n |_|    \\__, |_|   |_____| |_|   \\__,_|\\___|_|\\_\\__,_|\\__, |\\___| |_____/ \\__\\__,_|\\__|___/", style="bold blue")
-    banner_text.append("\n         __/ |                                         __/ |                               ", style="bold blue")
-    banner_text.append("\n        |___/                                         |___/                                \n", style="bold blue")
+    repo_name = extract_repo_name(project_metadata.repository_url)
+    
+    # Mini Style (2 lines high)
+    banner_text.append("\n █▀█ █▄█ █▀█ █   █▀█ █▀█ █▀▀ █▄▀ ▄▀█ █▀▀ █▀▀   █▀▀ ▀█▀ ▄▀█ ▀█▀ █▀", style="bold blue")
+    banner_text.append("\n █▀▀  █  █▀▀ █   █▀▀ █▀█ █▄▄ █ █ █▀█ █▄█ ██▄   ▄██  █  █▀█  █  ▄█\n", style="bold blue")
     
     banner_text.append(f"Version : {project_metadata.version}\n", style="bold blue")
-    banner_text.append(f"Author  : {project_metadata.author} ({project_metadata.author_url})\n", style="magenta")
-    banner_text.append(f"Repo    : {project_metadata.repository_url}\n", style="green")
+    banner_text.append(f"Author  : {project_metadata.author} ({project_metadata.author_url})\n", style="green")
     
-    console.print(Panel(banner_text, expand=False, border_style="blue", title="Welcome", title_align="left"))
+    console.print(Panel(banner_text, expand=False, border_style="blue", title=repo_name or "Welcome", title_align="left"))
