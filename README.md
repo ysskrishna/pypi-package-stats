@@ -6,10 +6,10 @@
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/pypi-package-stats?period=total&units=INTERNATIONAL_SYSTEM&left_color=GREY&right_color=BLUE&left_text=downloads)](https://pepy.tech/projects/pypi-package-stats)
 [![Documentation](https://img.shields.io/badge/docs-ysskrishna.github.io%2Fpypi--package--stats-blue.svg)](https://ysskrishna.github.io/pypi-package-stats/)
 
-![OG Image](https://raw.githubusercontent.com/ysskrishna/pypi-package-stats/main/media/og.png)
 
 A CLI for PyPI package stats and download analytics, built on the official pypistats API. Fetch daily, weekly, monthly, and 180-day downloads, Python version and OS breakdowns, package metadata, with flexible output (JSON or Rich console tables) and smart disk caching.
 
+![Example Output](https://raw.githubusercontent.com/ysskrishna/pypi-package-stats/main/media/example_output.png)
 
 ## Features
 
@@ -21,88 +21,38 @@ A CLI for PyPI package stats and download analytics, built on the official pypis
 - **Smart Disk Caching**: Persistent disk cache with configurable TTL (default: 1 hour)
 - **Cache Management**: Inspect cache usage or clear cached responses
 
-## Quick Start
+## Installation
 
 ```bash
 pip install pypi-package-stats
-pypi-package-stats package nestedutils
 ```
-
-Get JSON output:
-
-```bash
-pypi-package-stats package nestedutils --json
-```
-
-Disable cache for a single request:
-
-```bash
-pypi-package-stats package nestedutils --no-cache
-```
-
-### Example Output
-
-![Example Output](https://raw.githubusercontent.com/ysskrishna/pypi-package-stats/main/media/example_output.png)
 
 ## Usage
 
-### Fetch package statistics
+### Basic Usage
 
-```bash
-pypi-package-stats package <PACKAGE_NAME>
-```
+| Command | What you get |
+|---------|--------------|
+| `pypi-package-stats package <name>` | Main view (metadata + downloads) |
+| `pypi-package-stats package <name> --json` | Machine-friendly JSON output |
+| `pypi-package-stats --help` | Show help message |
 
-Example:
+**Example:**
 
 ```bash
 pypi-package-stats package nestedutils
 ```
 
-> The `package` command is the primary command used to fetch metadata and download analytics for a PyPI package.
-
-### JSON output
-
-```bash
-pypi-package-stats package <PACKAGE_NAME> --json
-```
-
-This is useful for scripting, automation, or piping data into other tools.
-
-### Cache Management
+### Advanced Usage
 
 Caching significantly speeds up repeated queries and helps avoid API rate limits when exploring multiple packages.
 
-#### Disable caching
-
-```bash
-pypi-package-stats package <PACKAGE_NAME> --no-cache
-```
-
-#### Custom cache TTL
-
-Set cache time-to-live in seconds (`0` disables caching):
-
-```bash
-pypi-package-stats package <PACKAGE_NAME> --cache-ttl 7200
-```
-
-#### Clear cache
-
-```bash
-pypi-package-stats cache-clear
-```
-
-#### View cache information
-
-```bash
-pypi-package-stats cache-info
-```
-
-### Help
-
-```bash
-pypi-package-stats --help
-```
+| Command | What you get |
+|---------|--------------|
+| `pypi-package-stats package <name> --no-cache` | Bypass cache for this request |
+| `pypi-package-stats package <name> --cache-ttl <seconds>` | Set custom cache TTL (e.g., `--cache-ttl 300` for 5 minutes) |
+| `pypi-package-stats cache-clear` | Remove all cached responses |
+| `pypi-package-stats cache-info` | Show cache statistics |
 
 ## Data Source & Rate Limiting
 
@@ -114,6 +64,7 @@ The built-in caching system helps minimize API calls and reduce the chance of hi
 
 * Python version and OS breakdowns are limited to the last 30 days
 * Data availability depends on the [pypistats](https://pypistats.org/) service
+* Data is usually 24–48 hours behind (pypistats limitation)
 
 ## Use Cases
 
@@ -122,16 +73,21 @@ The built-in caching system helps minimize API calls and reduce the chance of hi
 * Generate download statistics for reports or dashboards
 * Automate analytics workflows using JSON output
 
+
+## Links
+
+- **PyPI Package**: [pypi.org/project/pypi-package-stats](https://pypi.org/project/pypi-package-stats/)
+- **Documentation**: [ysskrishna.github.io/pypi-package-stats](https://ysskrishna.github.io/pypi-package-stats/)
+- **Issues**: [github.com/ysskrishna/pypi-package-stats/issues](https://github.com/ysskrishna/pypi-package-stats/issues)
+- **Changelog**: [CHANGELOG.md](https://github.com/ysskrishna/pypi-package-stats/blob/main/CHANGELOG.md)
+- **Release History**: [github.com/ysskrishna/pypi-package-stats/releases](https://github.com/ysskrishna/pypi-package-stats/releases)
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
 For development setup and guidelines, see [CONTRIBUTING.md](https://github.com/ysskrishna/pypi-package-stats/blob/main/CONTRIBUTING.md).
 
-
-## License
-
-MIT License - see [LICENSE](https://github.com/ysskrishna/pypi-package-stats/blob/main/LICENSE) file for details.
 
 ## Support
 
@@ -142,14 +98,9 @@ If you find this library useful, please consider:
 
 [Become a Sponsor on GitHub](https://github.com/sponsors/ysskrishna) | [Support on Patreon](https://patreon.com/ysskrishna)
 
-## Links
+## License
 
-- **PyPI Package**: [pypi.org/project/pypi-package-stats](https://pypi.org/project/pypi-package-stats/)
-- **Documentation**: [ysskrishna.github.io/pypi-package-stats](https://ysskrishna.github.io/pypi-package-stats/)
-- **Repository**: [github.com/ysskrishna/pypi-package-stats.git](https://github.com/ysskrishna/pypi-package-stats.git)
-- **Issues**: [github.com/ysskrishna/pypi-package-stats/issues](https://github.com/ysskrishna/pypi-package-stats/issues)
-- **Changelog**: [github.com/ysskrishna/pypi-package-stats/blob/main/CHANGELOG.md](https://github.com/ysskrishna/pypi-package-stats/blob/main/CHANGELOG.md)
-- **Releases**: [github.com/ysskrishna/pypi-package-stats/releases](https://github.com/ysskrishna/pypi-package-stats/releases)
+MIT License - see [LICENSE](https://github.com/ysskrishna/pypi-package-stats/blob/main/LICENSE) file for details.
 
 ## Author
 
