@@ -50,6 +50,14 @@ class PyPIClient:
             self._local.session = session
         return self._local.session
     
+    def __del__(self) -> None:
+        """Cleanup on object destruction."""
+        if hasattr(self, '_local') and hasattr(self._local, 'session'):
+            try:
+                self._local.session.close()
+            except Exception:
+                pass  # Ignore errors during cleanup
+    
     def _cached_get(self, url: str) -> Dict[str, Any]:
         """Get URL with caching - let diskcache handle thread safety."""
         if not self.use_cache:

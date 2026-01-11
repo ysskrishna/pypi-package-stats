@@ -1,7 +1,11 @@
 from pathlib import Path
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 import platformdirs
 import diskcache
+import threading
+
+_cache_instance: Optional[diskcache.Cache] = None
+_cache_lock = threading.Lock()
 
 def get_cache_dir() -> Path:
     """Get cache directory."""
@@ -10,9 +14,14 @@ def get_cache_dir() -> Path:
     return cache_dir
 
 def get_cache() -> diskcache.Cache:
-    """Get cache instance - diskcache handles thread safety."""
-    cache_dir = get_cache_dir() / "api_cache"
-    return diskcache.Cache(cache_dir)
+    """Get cache instance - thread-safe singleton with lazy initialization."""
+    global _cache_instance
+    if _cache_instance is None:
+        with _cache_lock:
+            if _cache_instance is None:
+                cache_dir = get_cache_dir() / "api_cache"
+                _cache_instance = diskcache.Cache(cache_dir)
+    return _cache_instance
 
 def clear_cache() -> None:
     """Clear all cached data."""
