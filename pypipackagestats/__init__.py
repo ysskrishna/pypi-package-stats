@@ -15,5 +15,3 @@ __all__ = [
     "PackageNotFoundError", 
     "APIError",
 ]
-
-__version__ = "2.0.0"
