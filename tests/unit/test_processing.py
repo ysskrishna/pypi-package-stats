@@ -161,7 +161,7 @@ class TestProcessPackageInfo:
         result = process_package_info(data)
         assert result.name == ""
         assert result.version == ""
-        assert result.author == ""
+        assert result.author is None  # get_at returns None for empty strings
 
 
 class TestProcessDownloadStats:

@@ -3,7 +3,7 @@ import threading
 import time
 import pytest
 import responses
-from requests.exceptions import HTTPError, Timeout, ConnectionError
+from requests.exceptions import HTTPError, Timeout, ConnectionError, RetryError
 from unittest.mock import Mock, patch, MagicMock
 from pypipackagestats.core.client import PyPIClient
 from pypipackagestats.core.constants import DEFAULT_CACHE_TTL, PYPI_API, STATS_API
@@ -280,8 +280,10 @@ class TestPyPIClientErrorHandling:
         client = PyPIClient(cache_ttl=0)
         url = "https://pypi.org/pypi/test/json"
         
-        responses.add(responses.GET, url, status=500)
-        with pytest.raises(HTTPError):
+        # Add enough 500 responses to exhaust retries
+        for _ in range(10):  # Ensure retries are exhausted
+            responses.add(responses.GET, url, status=500)
+        with pytest.raises(RetryError):
             client._cached_get(url)
     
     @responses.activate
