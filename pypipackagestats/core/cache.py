@@ -1,12 +1,7 @@
-import threading
 from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 import platformdirs
 import diskcache
-
-# Global thread-safe cache
-_cache_lock = threading.RLock()
-_cache_instance: Optional[diskcache.Cache] = None
 
 def get_cache_dir() -> Path:
     """Get cache directory."""
@@ -15,53 +10,18 @@ def get_cache_dir() -> Path:
     return cache_dir
 
 def get_cache() -> diskcache.Cache:
-    """Get thread-safe shared cache instance."""
-    global _cache_instance
-    if _cache_instance is None:
-        with _cache_lock:
-            if _cache_instance is None:
-                _cache_instance = diskcache.Cache(get_cache_dir() / "cache")
-    return _cache_instance
-
-def cached_get(url: str, session, cache_ttl: int, no_cache: bool) -> Dict[str, Any]:
-    """Thread-safe cached GET request."""
-    if no_cache:
-        response = session.get(url)
-        response.raise_for_status()
-        return response.json()
-    
-    cache = get_cache()
-    
-    # Thread-safe cache read
-    with _cache_lock:
-        cached_data = cache.get(url, default=None)
-    
-    if cached_data is not None:
-        return cached_data
-    
-    # Fetch from API
-    response = session.get(url)
-    response.raise_for_status()
-    data = response.json()
-    
-    # Thread-safe cache write
-    with _cache_lock:
-        cache.set(url, data, expire=cache_ttl)
-    
-    return data
+    """Get cache instance - diskcache handles thread safety."""
+    cache_dir = get_cache_dir() / "api_cache"
+    return diskcache.Cache(cache_dir)
 
 def clear_cache() -> None:
-    """Clear all cached data (thread-safe)."""
-    with _cache_lock:
-        get_cache().clear()
+    """Clear all cached data."""
+    get_cache().clear()
 
 def get_cache_info() -> Dict[str, Any]:
-    """Get cache information (thread-safe)."""
+    """Get cache information."""
     cache = get_cache()
-    with _cache_lock:
-        size = len(cache)
-    
     return {
-        "size": size,
-        "cache_dir": str(get_cache_dir() / "cache"),
+        "size": len(cache),
+        "cache_dir": str(get_cache_dir() / "api_cache"),
     }

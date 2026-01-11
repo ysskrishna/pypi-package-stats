@@ -2,6 +2,7 @@
 
 import threading
 import requests
+from typing import Optional
 from pypipackagestats.core.client import PyPIClient
 from pypipackagestats.core.models import PackageStats
 from pypipackagestats.core.processing import process_package_info, process_download_stats, process_category_breakdown
@@ -14,15 +15,19 @@ def get_package_stats(
     package_name: str,
     *,
     no_cache: bool = False,
-    cache_ttl: int = 3600,
+    cache_ttl: Optional[int] = None,
 ) -> PackageStats:
     """
     Get PyPI package statistics (thread-safe).
     
     Args:
         package_name: Package name
-        no_cache: Whether to disable caching (default: False)
-        cache_ttl: Cache TTL in seconds (default: 3600)
+        no_cache: Whether to disable caching (default: False). 
+                  If True, sets cache_ttl=0 to disable caching.
+        cache_ttl: Time-to-live for cache entries in seconds.
+                  - Positive integer → cache with that TTL (seconds)
+                  - 0 → disable caching completely
+                  - None or omitted → use default (3600 seconds)
         
     Returns:
         PackageStats: Package statistics
@@ -45,15 +50,21 @@ def get_package_stats(
     
     package_name = package_name.strip().lower()
     
+    # Convert no_cache to cache_ttl=0 for backward compatibility
+    if no_cache:
+        effective_cache_ttl = 0
+    else:
+        effective_cache_ttl = cache_ttl
+    
     # Thread-safe client reuse - each thread gets its own client
     # Client is reused only if cache settings match
-    cache_key = f"{no_cache}_{cache_ttl}"
+    cache_key = f"{effective_cache_ttl}"
     
     if (not hasattr(_thread_local, 'client') or 
         not hasattr(_thread_local, 'cache_key') or
         _thread_local.cache_key != cache_key):
         
-        _thread_local.client = PyPIClient(no_cache=no_cache, cache_ttl=cache_ttl)
+        _thread_local.client = PyPIClient(cache_ttl=effective_cache_ttl)
         _thread_local.cache_key = cache_key
     
     client = _thread_local.client
