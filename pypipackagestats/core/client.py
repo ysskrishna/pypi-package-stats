@@ -38,7 +38,7 @@ class PyPIClient:
         if not hasattr(self._local, 'session'):
             session = requests.Session()
             retry = Retry(
-                total=REQUEST_RETRY_MAX_TRIES,  # More retries for rate limiting
+                total=REQUEST_RETRY_MAX_TRIES,  # Total retries (covers connection and read errors)
                 status_forcelist=REQUEST_RETRY_STATUS_FORCELIST,
                 backoff_factor=REQUEST_RETRY_BACKOFF_FACTOR,
                 respect_retry_after_header=True,
@@ -47,14 +47,13 @@ class PyPIClient:
             adapter = HTTPAdapter(max_retries=retry)
             session.mount("https://", adapter)
             session.mount("http://", adapter)
-            session.timeout = REQUEST_TIMEOUT
             self._local.session = session
         return self._local.session
     
     def _cached_get(self, url: str) -> Dict[str, Any]:
         """Get URL with caching - let diskcache handle thread safety."""
         if not self.use_cache:
-            response = self._get_session().get(url)
+            response = self._get_session().get(url, timeout=REQUEST_TIMEOUT)
             response.raise_for_status()
             return response.json()
         
@@ -67,7 +66,7 @@ class PyPIClient:
             return cached_data
         
         # Fetch from API
-        response = self._get_session().get(url)
+        response = self._get_session().get(url, timeout=REQUEST_TIMEOUT)
         response.raise_for_status()
         data = response.json()
         

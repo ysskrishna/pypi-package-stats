@@ -9,8 +9,8 @@ PYPI_API = "https://pypi.org/pypi/{pkg}/json"
 STATS_API = "https://pypistats.org/api/packages/{pkg}/"
 
 # Request configuration
-REQUEST_RETRY_MAX_TRIES = 5
+REQUEST_RETRY_MAX_TRIES = 4
 REQUEST_RETRY_BACKOFF_FACTOR = 1
 REQUEST_RETRY_STATUS_FORCELIST = [429, 500, 502, 503, 504]
 REQUEST_RETRY_ALLOWED_METHODS = ["GET"]
-REQUEST_TIMEOUT = 30
+REQUEST_TIMEOUT = (2, 10)  # (connect_timeout, read_timeout) in seconds
