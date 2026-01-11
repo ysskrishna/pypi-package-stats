@@ -1,8 +1,8 @@
 """Public API for PyPI Package Stats."""
 
 import threading
-import requests
 from typing import Optional
+from requests.exceptions import HTTPError, RequestException
 from pypipackagestats.core.client import PyPIClient
 from pypipackagestats.core.models import PackageStats
 from pypipackagestats.core.processing import process_package_info, process_download_stats, process_category_breakdown
@@ -86,18 +86,18 @@ def get_package_stats(
             operating_systems=process_category_breakdown(system_stats, TOP_OS_COUNT),
         )
         
-    except requests.exceptions.HTTPError as e:
+    except HTTPError as e:
         if e.response and e.response.status_code == 404:
-            raise PackageNotFoundError(package_name)
+            raise PackageNotFoundError(package_name) from e
         elif e.response and e.response.status_code == 429:
             retry_after = e.response.headers.get('Retry-After', '60')
-            raise APIError(f"Rate limit exceeded. Retry after {retry_after} seconds", 429)
+            raise APIError(f"Rate limit exceeded. Retry after {retry_after} seconds", 429) from e
         else:
             status_code = e.response.status_code if e.response else None
-            raise APIError(f"HTTP {status_code}: {str(e)}", status_code)
+            raise APIError(f"HTTP {status_code}: {str(e)}", status_code) from e
     
-    except requests.exceptions.RequestException as e:
-        raise APIError(f"Network error for {package_name}: {str(e)}")
+    except RequestException as e:
+        raise APIError(f"Network error for {package_name}: {str(e)}") from e
     
     except Exception as e:
         raise PyPIStatsError(f"Unexpected error: {str(e)}") from e

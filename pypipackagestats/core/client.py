@@ -29,7 +29,7 @@ class PyPIClient:
                       - 0 → disable caching completely
                       - None or omitted → use default (3600 seconds)
         """
-        self.cache_ttl = cache_ttl or DEFAULT_CACHE_TTL if cache_ttl != 0 else 0
+        self.cache_ttl = (cache_ttl or DEFAULT_CACHE_TTL) if cache_ttl != 0 else 0
         self.use_cache = cache_ttl != 0
         self._local = threading.local()
     

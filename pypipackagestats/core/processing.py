@@ -1,5 +1,5 @@
 from typing import List, Dict, Any
-from datetime import date
+from datetime import date, timedelta
 from nestedutils import get_at
 from pypipackagestats.core.models import PackageInfo, DownloadStats, CategoryBreakdown
 from pypipackagestats.core.constants import TOP_PYTHON_VERSIONS_COUNT
@@ -38,7 +38,7 @@ def process_download_stats(recent: Dict[str, Any], overall: List[Dict[str, Any]]
 def process_category_breakdown(data: List[Dict[str, Any]], limit: int = TOP_PYTHON_VERSIONS_COUNT) -> List[CategoryBreakdown]:
     """Process category breakdown."""
     # Last 30 days only
-    cutoff = date.today().replace(day=1)
+    cutoff = date.today() - timedelta(days=30)
     recent = [d for d in data if d.get("date", "") >= cutoff.isoformat()]
     
     # Aggregate by category
