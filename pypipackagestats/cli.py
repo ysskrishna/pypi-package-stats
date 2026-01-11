@@ -4,6 +4,7 @@ from rich.console import Console
 from pypipackagestats import get_package_stats, clear_cache, get_cache_info
 from pypipackagestats.core.exceptions import PackageNotFoundError, APIError, PyPIStatsError
 from pypipackagestats.output.formatters import format_rich, print_project_banner
+from pypipackagestats.core.constants import DEFAULT_CACHE_TTL
 
 app = typer.Typer()
 console = Console()
@@ -13,7 +14,7 @@ def package(
     name: str = typer.Argument(..., help="Package name"),
     json_output: bool = typer.Option(False, "--json", "-j", help="JSON output"),
     no_cache: bool = typer.Option(False, "--no-cache", help="Disable cache"),
-    cache_ttl: int = typer.Option(3600, "--cache-ttl", help="Cache TTL in seconds"),
+    cache_ttl: int = typer.Option(DEFAULT_CACHE_TTL, "--cache-ttl", help="Cache TTL in seconds"),
 ):
     """Get package statistics."""
     try:

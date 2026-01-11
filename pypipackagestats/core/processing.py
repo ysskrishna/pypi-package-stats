@@ -2,6 +2,7 @@ from typing import List, Dict, Any
 from datetime import datetime, date
 from nestedutils import get_at
 from pypipackagestats.core.models import PackageInfo, DownloadStats, CategoryBreakdown
+from pypipackagestats.core.constants import TOP_PYTHON_VERSIONS_COUNT
 
 def process_package_info(data: Dict[str, Any]) -> PackageInfo:
     """Process package metadata."""
@@ -42,7 +43,7 @@ def process_download_stats(recent: Dict[str, Any], overall: List[Dict[str, Any]]
         last_180d=sum(get_at(d, "downloads", default=0) for d in overall),
     )
 
-def process_category_breakdown(data: List[Dict[str, Any]], limit: int = 5) -> List[CategoryBreakdown]:
+def process_category_breakdown(data: List[Dict[str, Any]], limit: int = TOP_PYTHON_VERSIONS_COUNT) -> List[CategoryBreakdown]:
     """Process category breakdown."""
     # Last 30 days only
     cutoff = date.today().replace(day=1)

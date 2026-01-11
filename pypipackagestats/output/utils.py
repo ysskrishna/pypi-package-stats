@@ -1,5 +1,6 @@
 from datetime import date, datetime
 from nestedutils import get_at
+from pypipackagestats.core.constants import DATE_ISO_FORMAT_LENGTH
 
 
 def humanize_number(num: int) -> str:
@@ -61,7 +62,7 @@ def humanize_date(date_str: str) -> str:
     
     try:
         # Parse ISO date format (YYYY-MM-DD)
-        dt = datetime.strptime(date_str[:10], "%Y-%m-%d")
+        dt = datetime.strptime(date_str[:DATE_ISO_FORMAT_LENGTH], "%Y-%m-%d")
         # Format as "Month Day, Year" (e.g., "December 7, 2025")
         return dt.strftime("%B %d, %Y")
     except (ValueError, TypeError):

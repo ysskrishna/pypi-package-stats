@@ -6,6 +6,7 @@ from rich import box
 from pypipackagestats.core.metadata import get_project_metadata
 from pypipackagestats.core.models import PackageStats
 from pypipackagestats.output.utils import normalize_os_name, humanize_number, humanize_date, extract_repo_name
+from pypipackagestats.core.constants import DATE_ISO_FORMAT_LENGTH
 
 
 console = Console()
@@ -18,7 +19,7 @@ def format_rich(stats: PackageStats) -> None:
     console.print(f"\n[bold cyan]{pkg.name}[/bold cyan]")
     console.print(f"{pkg.description or ''}")
     console.print(f"Version     : {pkg.version or 'Unknown'}")
-    upload_time_str = pkg.upload_time.isoformat()[:10] if pkg.upload_time else None
+    upload_time_str = pkg.upload_time.isoformat()[:DATE_ISO_FORMAT_LENGTH] if pkg.upload_time else None
     console.print(f"Upload time : {humanize_date(upload_time_str) if upload_time_str else 'Unknown'}")
     console.print(f"Author      : {pkg.author or 'Unknown'}")
     console.print(f"License     : {pkg.license or 'Unknown'}")

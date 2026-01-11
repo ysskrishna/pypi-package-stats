@@ -7,6 +7,7 @@ from pypipackagestats.core.client import PyPIClient
 from pypipackagestats.core.models import PackageStats
 from pypipackagestats.core.processing import process_package_info, process_download_stats, process_category_breakdown
 from pypipackagestats.core.exceptions import PackageNotFoundError, APIError, PyPIStatsError
+from pypipackagestats.core.constants import TOP_PYTHON_VERSIONS_COUNT, TOP_OS_COUNT
 
 # Thread-local storage for client reuse
 _thread_local = threading.local()
@@ -81,8 +82,8 @@ def get_package_stats(
         return PackageStats(
             package_info=process_package_info(package_data),
             downloads=process_download_stats(recent_stats, overall_stats),
-            python_versions=process_category_breakdown(python_stats, 5),
-            operating_systems=process_category_breakdown(system_stats, 4),
+            python_versions=process_category_breakdown(python_stats, TOP_PYTHON_VERSIONS_COUNT),
+            operating_systems=process_category_breakdown(system_stats, TOP_OS_COUNT),
         )
         
     except requests.exceptions.HTTPError as e:
