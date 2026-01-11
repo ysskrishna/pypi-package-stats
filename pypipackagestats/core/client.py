@@ -1,4 +1,6 @@
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 import diskcache
 from typing import Optional
 from nestedutils import get_at
@@ -6,14 +8,20 @@ from pypipackagestats.core.cache import get_cache_dir
 from pypipackagestats.constants import DEFAULT_CACHE_TTL
 
 
+
 class PyPIClient:
     PYPI_API = "https://pypi.org/pypi/{pkg}/json"
     STATS_API = "https://pypistats.org/api/packages/{pkg}/"
+
+    # Default retry configuration
+    DEFAULT_MAX_RETRIES = 3
+    DEFAULT_BACKOFF_FACTOR = 1  # Wait 1s, 2s, 4s between retries
+    RETRIABLE_STATUS_CODES = [429, 500, 502, 503, 504]
     
     def __init__(self, cache_ttl: Optional[int] = DEFAULT_CACHE_TTL):
         """
         Initialize PyPI client with persistent disk cache.
-        
+
         Args:
             cache_ttl: Time-to-live for cache entries in seconds.
                       - Positive integer → cache with that TTL (seconds)
@@ -29,37 +37,51 @@ class PyPIClient:
             self.cache_ttl = cache_ttl or DEFAULT_CACHE_TTL
             cache_dir = get_cache_dir() / "api_cache"
             self.cache = diskcache.Cache(cache_dir)
+
+        # Configure retry strategy with exponential backoff
+        retry_strategy = Retry(
+            total=self.DEFAULT_MAX_RETRIES,
+            backoff_factor=self.DEFAULT_BACKOFF_FACTOR,
+            status_forcelist=self.RETRIABLE_STATUS_CODES,
+            allowed_methods=["GET"],
+            respect_retry_after_header=True,
+        )
+        adapter = HTTPAdapter(max_retries=retry_strategy)
+        self.session = requests.Session()
+        self.session.mount("https://", adapter)
+        self.session.mount("http://", adapter)
     
     def _cached_get(self, url: str) -> dict:
         """
-        Get URL with persistent disk caching.
-        
+        Get URL with persistent disk caching and automatic retry on failures.
+
         Cache keys are based on URL, and entries expire after cache_ttl seconds.
+        Retries automatically on 429 (rate limit) and 5xx errors with exponential backoff.
         """
         if self.cache is None:
-            # No cache - direct API call
-            response = requests.get(url)
+            # No cache - direct API call with retry
+            response = self.session.get(url)
             response.raise_for_status()
             return response.json()
-        
+
         # Check cache first
         cache_key = f"url:{url}"
-        
+
         # Try to get from cache
         cached_data = self.cache.get(cache_key, default=None)
-        
+
         if cached_data is not None:
             return cached_data
-        
-        # Cache miss - fetch from API
-        response = requests.get(url)
+
+        # Cache miss - fetch from API with retry
+        response = self.session.get(url)
         response.raise_for_status()
         data = response.json()
-        
+
         # Store in cache if the request was successful
         if 200 <= response.status_code < 300:
             self.cache.set(cache_key, data, expire=self.cache_ttl)
-        
+
         return data
     
     def get_package_info(self, package: str) -> dict:
