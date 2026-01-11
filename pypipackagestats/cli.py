@@ -2,7 +2,7 @@ import json
 import typer
 from rich.console import Console
 from pypipackagestats import get_package_stats, clear_cache, get_cache_info
-from pypipackagestats.exceptions import PackageNotFoundError, APIError, PyPIStatsError
+from pypipackagestats.core.exceptions import PackageNotFoundError, APIError, PyPIStatsError
 from pypipackagestats.output.formatters import format_rich, print_project_banner
 
 app = typer.Typer()

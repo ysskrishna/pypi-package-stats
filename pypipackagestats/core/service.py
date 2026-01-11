@@ -7,7 +7,7 @@ from pypipackagestats.output.utils import (
     get_last_30_days_data,
     aggregate_by_category,
 )
-from pypipackagestats.constants import (
+from pypipackagestats.core.constants import (
     TOP_PYTHON_VERSIONS_COUNT,
     TOP_OS_COUNT,
     DATE_ISO_FORMAT_LENGTH,
@@ -36,7 +36,7 @@ class PackageStatsService:
 
         recent_stats = self.client.get_recent_stats(package)
         overall_stats = self.client.get_overall_stats(package)
-        py_stats = self.client.get_python_minor_stats(package)
+        py_stats = self.client.get_python_stats(package)
         os_stats = self.client.get_system_stats(package)
 
         return {
