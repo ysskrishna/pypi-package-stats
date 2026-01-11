@@ -8,8 +8,7 @@ from pypipackagestats.output.utils import get_upload_time
 def process_package_info(data: Dict[str, Any]) -> PackageInfo:
     """Process package metadata."""
     info = get_at(data, "info", default={})
-    
-    # Get upload time
+
     
     return PackageInfo(
         name=get_at(info, "name", ""),

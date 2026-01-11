@@ -7,7 +7,7 @@
 [![Documentation](https://img.shields.io/badge/docs-ysskrishna.github.io%2Fpypi--package--stats-blue.svg)](https://ysskrishna.github.io/pypi-package-stats/)
 
 
-A CLI for PyPI package stats and download analytics, built on the official pypistats API. Fetch daily, weekly, monthly, and 180-day downloads, Python version and OS breakdowns, package metadata, with flexible output (JSON or Rich console tables) and smart disk caching.
+A CLI tool and a Python library for PyPI package stats and download analytics, built on the official pypistats API. Fetch daily, weekly, monthly, and 180-day downloads, Python version and OS breakdowns, package metadata, with smart disk caching.
 
 ![Example Output](https://raw.githubusercontent.com/ysskrishna/pypi-package-stats/main/media/example_output.png)
 
@@ -143,7 +143,6 @@ The built-in caching system helps minimize API calls and reduce the chance of hi
 ## Roadmap
 
 - [ ] Add comprehensive test suite
-- [ ] Refactor code to import as module and use as a library
 
 ## Links
 
