@@ -40,7 +40,74 @@ pip install pypi-package-stats
 **Example:**
 
 ```bash
-pypi-package-stats package nestedutils
+pypi-package-stats package nestedutils --json
+```
+
+**Example JSON Output:**
+
+```json
+{
+  "package": {
+    "name": "nestedutils",
+    "version": "1.1.7",
+    "upload_time": "2026-01-25",
+    "description": "The lightweight Python library for safe, simple, dot-notation access to nested dicts and lists. Effortlessly get, set, and delete values deep in your complex JSON, API responses, and config files without verbose error-checking or handling KeyError exceptions.",
+    "author": "ysskrishna <sivasaikrishnassk@gmail.com>",
+    "license": "MIT",
+    "home_page": "https://pypi.org/project/nestedutils/",
+    "pypi_url": "https://pypi.org/project/nestedutils/"
+  },
+  "downloads": {
+    "last_day": 1,
+    "last_week": 112,
+    "last_month": 307,
+    "last_180d": 1142
+  },
+  "python_versions": [
+    {
+      "version": "null",
+      "downloads": 278,
+      "percentage": 92.4
+    },
+    {
+      "version": "3.10",
+      "downloads": 8,
+      "percentage": 2.7
+    },
+    {
+      "version": "3.11",
+      "downloads": 4,
+      "percentage": 1.3
+    },
+    {
+      "version": "3.12",
+      "downloads": 4,
+      "percentage": 1.3
+    },
+    {
+      "version": "3.13",
+      "downloads": 4,
+      "percentage": 1.3
+    }
+  ],
+  "operating_systems": [
+    {
+      "os": "null",
+      "downloads": 278,
+      "percentage": 92.4
+    },
+    {
+      "os": "Linux",
+      "downloads": 19,
+      "percentage": 6.3
+    },
+    {
+      "os": "Darwin",
+      "downloads": 4,
+      "percentage": 1.3
+    }
+  ]
+}
 ```
 
 ### Advanced Usage
