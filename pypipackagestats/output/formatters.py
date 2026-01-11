@@ -19,7 +19,7 @@ def format_rich(stats: PackageStats) -> None:
     console.print(f"\n[bold cyan]{pkg.name}[/bold cyan]")
     console.print(f"{pkg.description or ''}")
     console.print(f"Version     : {pkg.version or 'Unknown'}")
-    upload_time_str = pkg.upload_time.isoformat()[:DATE_ISO_FORMAT_LENGTH] if pkg.upload_time else None
+    upload_time_str = pkg.upload_time[:DATE_ISO_FORMAT_LENGTH] if pkg.upload_time else None
     console.print(f"Upload time : {humanize_date(upload_time_str) if upload_time_str else 'Unknown'}")
     console.print(f"Author      : {pkg.author or 'Unknown'}")
     console.print(f"License     : {pkg.license or 'Unknown'}")

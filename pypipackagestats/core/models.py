@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from typing import List, Dict, Any, Optional
-from datetime import datetime
 from pypipackagestats.core.constants import DATE_ISO_FORMAT_LENGTH
 
 @dataclass(frozen=True)
@@ -20,7 +19,7 @@ class PackageInfo:
     license: Optional[str] = None
     home_page: Optional[str] = None
     pypi_url: Optional[str] = None
-    upload_time: Optional[datetime] = None
+    upload_time: Optional[str] = None
 
 @dataclass(frozen=True)
 class DownloadStats:
@@ -48,7 +47,7 @@ class PackageStats:
             "package": {
                 "name": self.package_info.name,
                 "version": self.package_info.version,
-                "upload_time": self.package_info.upload_time.isoformat()[:DATE_ISO_FORMAT_LENGTH] if self.package_info.upload_time else None,
+                "upload_time": self.package_info.upload_time[:DATE_ISO_FORMAT_LENGTH] if self.package_info.upload_time else None,
                 "description": self.package_info.description,
                 "author": self.package_info.author,
                 "license": self.package_info.license,

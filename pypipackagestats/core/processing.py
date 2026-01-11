@@ -1,23 +1,15 @@
 from typing import List, Dict, Any
-from datetime import datetime, date
+from datetime import date
 from nestedutils import get_at
 from pypipackagestats.core.models import PackageInfo, DownloadStats, CategoryBreakdown
 from pypipackagestats.core.constants import TOP_PYTHON_VERSIONS_COUNT
+from pypipackagestats.output.utils import get_upload_time
 
 def process_package_info(data: Dict[str, Any]) -> PackageInfo:
     """Process package metadata."""
     info = get_at(data, "info", default={})
     
     # Get upload time
-    upload_time = None
-    version = get_at(info, "version")
-    if version:
-        time_str = get_at(data, ["releases", version, 0, "upload_time"])
-        if time_str:
-            try:
-                upload_time = datetime.fromisoformat(time_str.replace('Z', '+00:00'))
-            except (ValueError, AttributeError):
-                pass
     
     return PackageInfo(
         name=get_at(info, "name", ""),
@@ -31,7 +23,7 @@ def process_package_info(data: Dict[str, Any]) -> PackageInfo:
             get_at(info, ["project_urls", "Homepage"])
         ),
         pypi_url=get_at(info, "package_url"),
-        upload_time=upload_time,
+        upload_time=get_upload_time(data),
     )
 
 def process_download_stats(recent: Dict[str, Any], overall: List[Dict[str, Any]]) -> DownloadStats:

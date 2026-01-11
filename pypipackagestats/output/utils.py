@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import datetime
 from nestedutils import get_at
 from pypipackagestats.core.constants import DATE_ISO_FORMAT_LENGTH
 
@@ -38,21 +38,6 @@ def get_upload_time(pkg_data: dict) -> str:
             return upload_time
     
     return ""
-
-
-def get_last_30_days_data(data: list) -> list:
-    """Filter data to last 30 days"""
-    cutoff = date.today().replace(day=1)  # First day of current month
-    return [d for d in data if d["date"] >= cutoff.isoformat()]
-
-
-def aggregate_by_category(data: list) -> dict:
-    """Aggregate downloads by category"""
-    totals = {}
-    for row in data:
-        cat = row["category"]
-        totals[cat] = totals.get(cat, 0) + row["downloads"]
-    return totals
 
 
 def humanize_date(date_str: str) -> str:
