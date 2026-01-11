@@ -19,7 +19,7 @@ def package(
     try:
         stats = get_package_stats(
             name, 
-            use_cache=not no_cache, 
+            no_cache=no_cache, 
             cache_ttl=cache_ttl
         )
         

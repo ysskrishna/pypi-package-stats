@@ -13,7 +13,7 @@ _thread_local = threading.local()
 def get_package_stats(
     package_name: str,
     *,
-    use_cache: bool = True,
+    no_cache: bool = False,
     cache_ttl: int = 3600,
 ) -> PackageStats:
     """
@@ -21,7 +21,7 @@ def get_package_stats(
     
     Args:
         package_name: Package name
-        use_cache: Whether to use caching (default: True)
+        no_cache: Whether to disable caching (default: False)
         cache_ttl: Cache TTL in seconds (default: 3600)
         
     Returns:
@@ -47,13 +47,13 @@ def get_package_stats(
     
     # Thread-safe client reuse - each thread gets its own client
     # Client is reused only if cache settings match
-    cache_key = f"{use_cache}_{cache_ttl}"
+    cache_key = f"{no_cache}_{cache_ttl}"
     
     if (not hasattr(_thread_local, 'client') or 
         not hasattr(_thread_local, 'cache_key') or
         _thread_local.cache_key != cache_key):
         
-        _thread_local.client = PyPIClient(use_cache=use_cache, cache_ttl=cache_ttl)
+        _thread_local.client = PyPIClient(no_cache=no_cache, cache_ttl=cache_ttl)
         _thread_local.cache_key = cache_key
     
     client = _thread_local.client

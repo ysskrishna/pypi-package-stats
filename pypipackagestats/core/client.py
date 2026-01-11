@@ -9,8 +9,8 @@ from pypipackagestats.core.cache import cached_get
 class PyPIClient:
     """Thread-safe PyPI API client."""
     
-    def __init__(self, use_cache: bool = True, cache_ttl: int = 3600):
-        self.use_cache = use_cache
+    def __init__(self, no_cache: bool = False, cache_ttl: int = 3600):
+        self.no_cache = no_cache
         self.cache_ttl = cache_ttl
         self._local = threading.local()
     
@@ -19,10 +19,11 @@ class PyPIClient:
         if not hasattr(self._local, 'session'):
             session = requests.Session()
             retry = Retry(
-                total=3, 
+                total=5,  # More retries for rate limiting
                 status_forcelist=[429, 500, 502, 503, 504],
-                backoff_factor=1,
-                respect_retry_after_header=True
+                backoff_factor=2,  # Exponential backoff: 1, 2, 4, 8, 16 seconds
+                respect_retry_after_header=True,
+                allowed_methods=["GET"],  # Only retry GET requests
             )
             adapter = HTTPAdapter(max_retries=retry)
             session.mount("https://", adapter)
@@ -32,7 +33,7 @@ class PyPIClient:
     
     def _get(self, url: str) -> Dict[str, Any]:
         """Thread-safe GET with caching."""
-        return cached_get(url, self._get_session(), self.cache_ttl, self.use_cache)
+        return cached_get(url, self._get_session(), self.cache_ttl, self.no_cache)
     
     def get_package_info(self, package: str) -> Dict[str, Any]:
         """Get package metadata."""

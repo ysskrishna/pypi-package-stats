@@ -23,9 +23,9 @@ def get_cache() -> diskcache.Cache:
                 _cache_instance = diskcache.Cache(get_cache_dir() / "cache")
     return _cache_instance
 
-def cached_get(url: str, session, cache_ttl: int, use_cache: bool) -> Dict[str, Any]:
+def cached_get(url: str, session, cache_ttl: int, no_cache: bool) -> Dict[str, Any]:
     """Thread-safe cached GET request."""
-    if not use_cache:
+    if no_cache:
         response = session.get(url)
         response.raise_for_status()
         return response.json()
