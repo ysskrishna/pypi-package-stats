@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0]
+
+### Added
+
+- Public Python API (`get_package_stats` function) for programmatic access to PyPI package statistics
+- Automatic retry mechanism with exponential backoff for handling transient network errors and rate limits
+- Custom exception hierarchy (`PyPIStatsError`, `PackageNotFoundError`, `APIError`) for better error handling
+- Comprehensive test suite with unit tests for core functionality (client, cache, processing, utilities)
+- GitHub Actions CI/CD workflow for automated testing across Python 3.8-3.12
+- Test fixtures and sample data for reliable testing
+
+### Changed
+
+- Major codebase refactoring with improved architecture and separation of concerns
+- Reorganized code structure: moved core functionality to `core/` directory (client, cache, exceptions, models, processing, constants)
+- Introduced `api.py` module providing clean public API interface
+- Enhanced README documentation with clearer structure and examples
+
 ## [1.3.2]
 
 ### Added
@@ -105,6 +123,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rich terminal output with formatted tables
 - Support for Python 3.8+
 
+[1.4.0]: https://github.com/ysskrishna/pypi-package-stats/compare/v1.3.2...v1.4.0
 [1.3.2]: https://github.com/ysskrishna/pypi-package-stats/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/ysskrishna/pypi-package-stats/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/ysskrishna/pypi-package-stats/compare/v1.2.0...v1.3.0
