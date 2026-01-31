@@ -182,11 +182,6 @@ The built-in caching system helps minimize API calls and reduce the chance of hi
 * Integrate PyPI stats into your Python applications
 * Build custom dashboards and monitoring tools
 
-## Roadmap
-
-- [ ] Add comprehensive test suite
-
-
 
 ## Contributing
 
@@ -204,7 +199,7 @@ If you find this library helpful:
 
 ## License
 
-MIT © [Y. Siva Sai Krishna](https://github.com/ysskrishna) - - see [LICENSE](https://github.com/ysskrishna/pypi-package-stats/blob/main/LICENSE) file for details.
+MIT © [Y. Siva Sai Krishna](https://github.com/ysskrishna) - see [LICENSE](https://github.com/ysskrishna/pypi-package-stats/blob/main/LICENSE) for details.
 
 ---
 
