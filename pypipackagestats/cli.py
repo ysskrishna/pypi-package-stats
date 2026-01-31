@@ -1,78 +1,60 @@
+import json
 import typer
-import requests
 from rich.console import Console
+from pypipackagestats import get_package_stats, clear_cache, get_cache_info
+from pypipackagestats.core.exceptions import PackageNotFoundError, APIError, PyPIStatsError
+from pypipackagestats.output.formatters import format_rich, print_project_banner
+from pypipackagestats.core.constants import DEFAULT_CACHE_TTL
 
-from pypipackagestats.core.client import PyPIClient
-from pypipackagestats.service import PackageStatsService
-from pypipackagestats.core.cache import get_cache_dir
-from pypipackagestats.constants import DEFAULT_CACHE_TTL
-from pypipackagestats.output.formatters import print_project_banner
-
-app = typer.Typer(
-    invoke_without_command=True,
-    no_args_is_help=True,
-)
+app = typer.Typer()
 console = Console()
 
-
-@app.command(no_args_is_help=True)
+@app.command()
 def package(
-    package: str = typer.Argument(..., help="Package name to query"),
-    json: bool = typer.Option(False, "--json", "-j", help="Output as JSON"),
-    cache_ttl: int | None = typer.Option(
-        None,
-        "--cache-ttl",
-        help=f"Cache TTL in seconds (0 = disable, default = {DEFAULT_CACHE_TTL})",
-    ),
-    no_cache: bool = typer.Option(
-        False, "--no-cache", help="Disable caching (equivalent to --cache-ttl 0)"
-    ),
+    name: str = typer.Argument(..., help="Package name"),
+    json_output: bool = typer.Option(False, "--json", "-j", help="JSON output"),
+    no_cache: bool = typer.Option(False, "--no-cache", help="Disable cache"),
+    cache_ttl: int = typer.Option(DEFAULT_CACHE_TTL, "--cache-ttl", help="Cache TTL in seconds"),
 ):
-    """Display PyPI package metadata and download information."""
-    # --no-cache takes precedence
-    effective_ttl = 0 if no_cache else (cache_ttl if cache_ttl is not None else DEFAULT_CACHE_TTL)
-
-    client = PyPIClient(cache_ttl=effective_ttl)
-    service = PackageStatsService(client)
-
+    """Get package statistics."""
     try:
-        service.display_package_stats(package, json)
-
-    except requests.exceptions.HTTPError as e:
-        if e.response.status_code == 404:
-            console.print(f"[red]Error:[/red] Package '{package}' not found on PyPI.")
+        stats = get_package_stats(
+            name, 
+            no_cache=no_cache, 
+            cache_ttl=cache_ttl
+        )
+        
+        if json_output:
+            console.print(json.dumps(stats.to_dict(), indent=2))
         else:
-            console.print(f"[red]Error:[/red] HTTP {e.response.status_code}: {e.response.reason}")
-        raise typer.Exit(code=1)
-    except Exception as e:
-        console.print(f"[red]Unexpected error:[/red] {e}")
-        raise typer.Exit(code=1)
+            format_rich(stats)
+            
+    except PackageNotFoundError as e:
+        console.print(f"[red]Package '{e.package_name}' not found on PyPI[/red]")
+        raise typer.Exit(1)
+    except APIError as e:
+        console.print(f"[red]API Error: {e}[/red]")
+        raise typer.Exit(1)
+    except PyPIStatsError as e:
+        console.print(f"[red]Error: {e}[/red]")
+        raise typer.Exit(1)
 
+@app.command("cache-clear")
+def cache_clear_cmd():
+    """Clear cache."""
+    clear_cache()
+    console.print("[green]✓ Cache cleared[/green]")
 
-@app.command()
-def cache_clear():
-    """Clear cache directory"""
-    client = PyPIClient()
-    client.clear_cache()
-    console.print("[green]✓ Cache cleared successfully[/green]")
-
-
-@app.command()
-def cache_info():
-    """Display information about the current cache."""
-    cache_dir = get_cache_dir()
-    client = PyPIClient()  # Uses default TTL
-
-    size = client.get_cache_size()
-
-    console.print(f"[cyan]Cache directory:[/cyan] {cache_dir / 'api_cache'}")
-    console.print(f"[cyan]Entries:[/cyan] {size}")
-
+@app.command("cache-info")
+def cache_info_cmd():
+    """Show cache info."""
+    info = get_cache_info()
+    console.print(f"[cyan]Entries:[/cyan] {info['size']}")
+    console.print(f"[cyan]Directory:[/cyan] {info['cache_dir']}")
 
 def main():
     print_project_banner()
     app()
-
 
 if __name__ == "__main__":
     main()
