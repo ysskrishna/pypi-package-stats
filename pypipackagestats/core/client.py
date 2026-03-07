@@ -1,3 +1,6 @@
+import time
+from urllib.parse import urlparse
+
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
@@ -9,6 +12,8 @@ from pypipackagestats.core.constants import (
     DEFAULT_CACHE_TTL,
     PYPI_API,
     STATS_API,
+    RATE_LIMIT_MIN_INTERVAL,
+    RATE_LIMIT_HOSTS,
     REQUEST_RETRY_MAX_TRIES,
     REQUEST_RETRY_BACKOFF_FACTOR,
     REQUEST_RETRY_STATUS_FORCELIST,
@@ -18,7 +23,10 @@ from pypipackagestats.core.constants import (
 
 class PyPIClient:
     """Thread-safe PyPI API client."""
-    
+
+    _rate_limit_lock = threading.Lock()
+    _host_last_request_time: Dict[str, float] = {}
+
     def __init__(self, cache_ttl: Optional[int] = DEFAULT_CACHE_TTL):
         """
         Initialize PyPI client with persistent disk cache.
@@ -58,30 +66,48 @@ class PyPIClient:
             except Exception:
                 pass  # Ignore errors during cleanup
     
+    def _throttle(self, url: str) -> None:
+        """Enforce minimum interval between requests to rate-limited hosts."""
+        host = urlparse(url).hostname
+        if host not in RATE_LIMIT_HOSTS:
+            return
+        with PyPIClient._rate_limit_lock:
+            now = time.monotonic()
+            last = PyPIClient._host_last_request_time.get(host, 0.0)
+            elapsed = now - last
+            if elapsed < RATE_LIMIT_MIN_INTERVAL:
+                time.sleep(RATE_LIMIT_MIN_INTERVAL - elapsed)
+            PyPIClient._host_last_request_time[host] = time.monotonic()
+
+    def _http_get(self, url: str) -> requests.Response:
+        """Fetch JSON from URL with throttling."""
+        self._throttle(url)
+        response = self._get_session().get(url, timeout=REQUEST_TIMEOUT)
+        response.raise_for_status()
+        return response
+
     def _cached_get(self, url: str) -> Dict[str, Any]:
         """Get URL with caching - let diskcache handle thread safety."""
         if not self.use_cache:
-            response = self._get_session().get(url, timeout=REQUEST_TIMEOUT)
-            response.raise_for_status()
+            response = self._http_get(url)
             return response.json()
-        
+
         cache = get_cache()
         cache_key = f"url:{url}"
-        
+
         # diskcache handles thread safety internally
         cached_data = cache.get(cache_key, default=None)
         if cached_data is not None:
             return cached_data
-        
+
         # Fetch from API
-        response = self._get_session().get(url, timeout=REQUEST_TIMEOUT)
-        response.raise_for_status()
+        response = self._http_get(url)
         data = response.json()
-        
+
         # Store in cache - diskcache handles locking
         if 200 <= response.status_code < 300:
             cache.set(cache_key, data, expire=self.cache_ttl)
-        
+
         return data
     
     def get_package_info(self, package: str) -> dict:

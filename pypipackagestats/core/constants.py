@@ -8,6 +8,10 @@ DATE_ISO_FORMAT_LENGTH = 10  # Length of ISO date format string (YYYY-MM-DD)
 PYPI_API = "https://pypi.org/pypi/{pkg}/json"
 STATS_API = "https://pypistats.org/api/packages/{pkg}/"
 
+# Rate limiting
+RATE_LIMIT_MIN_INTERVAL = 0.25  # Min seconds between requests to same host
+RATE_LIMIT_HOSTS = ["pypistats.org"]  # Hosts requiring throttling
+
 # Request configuration
 REQUEST_RETRY_MAX_TRIES = 4
 REQUEST_RETRY_BACKOFF_FACTOR = 1

@@ -5,6 +5,7 @@ import pytest
 from unittest.mock import Mock, MagicMock
 import responses
 from pypipackagestats.core.cache import clear_cache, get_cache
+from pypipackagestats.core.client import PyPIClient
 
 
 @pytest.fixture(autouse=True)
@@ -13,6 +14,14 @@ def clear_cache_before_test():
     clear_cache()
     yield
     clear_cache()
+
+
+@pytest.fixture(autouse=True)
+def reset_rate_limit_state():
+    """Reset class-level rate limit state between tests."""
+    PyPIClient._host_last_request_time = {}
+    yield
+    PyPIClient._host_last_request_time = {}
 
 
 @pytest.fixture

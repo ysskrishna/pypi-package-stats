@@ -65,7 +65,7 @@ class PackageStats:
                 for pv in self.python_versions
             ],
             "operating_systems": [
-                {"os": os.category, "downloads": os.downloads, "percentage": os.percentage}
-                for os in self.operating_systems
+                {"os": os_stat.category, "downloads": os_stat.downloads, "percentage": os_stat.percentage}
+                for os_stat in self.operating_systems
             ],
         }

@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0]
+
+### Added
+
+- Request throttling for rate-limited hosts (e.g. pypistats.org) to avoid 429s
+
+### Changed
+
+- CI workflow now tests on Python 3.8 through 3.14
+- Safe date parsing for Python version breakdown (handles invalid date strings)
+- More robust repository URL handling: strip `.git` suffix only when URL ends with `.git`
+- Renamed loop variable `os` to `os_stat` in models to avoid shadowing the `os` module
+
 ## [1.4.0]
 
 ### Added
@@ -123,6 +136,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Rich terminal output with formatted tables
 - Support for Python 3.8+
 
+[1.5.0]: https://github.com/ysskrishna/pypi-package-stats/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/ysskrishna/pypi-package-stats/compare/v1.3.2...v1.4.0
 [1.3.2]: https://github.com/ysskrishna/pypi-package-stats/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/ysskrishna/pypi-package-stats/compare/v1.3.0...v1.3.1
