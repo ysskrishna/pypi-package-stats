@@ -68,7 +68,7 @@ def extract_repo_name(repository_url: str) -> str:
         return ""
     
     # Remove .git suffix if present
-    repo_name = repository_url.rstrip('.git')
+    repo_name = repository_url[:-4] if repository_url.endswith('.git') else repository_url
     
     # Extract owner/repo from URL
     if 'github.com/' in repo_name:

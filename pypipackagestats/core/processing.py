@@ -1,9 +1,18 @@
-from typing import List, Dict, Any
-from datetime import date, timedelta
+from typing import List, Dict, Any, Optional
+from datetime import date, datetime, timedelta
 from nestedutils import get_at
 from pypipackagestats.core.models import PackageInfo, DownloadStats, CategoryBreakdown
 from pypipackagestats.core.constants import TOP_PYTHON_VERSIONS_COUNT
 from pypipackagestats.output.utils import get_upload_time
+
+def _parse_date_safe(date_str: str) -> Optional[date]:
+    """Parse ISO date string safely, returning None if invalid."""
+    if not date_str:
+        return None
+    try:
+        return datetime.strptime(date_str[:10], "%Y-%m-%d").date()
+    except (ValueError, TypeError):
+        return None
 
 def process_package_info(data: Dict[str, Any]) -> PackageInfo:
     """Process package metadata."""
@@ -38,7 +47,7 @@ def process_category_breakdown(data: List[Dict[str, Any]], limit: int = TOP_PYTH
     """Process category breakdown."""
     # Last 30 days only
     cutoff = date.today() - timedelta(days=30)
-    recent = [d for d in data if d.get("date", "") >= cutoff.isoformat()]
+    recent = [d for d in data if (parsed_date := _parse_date_safe(d.get("date", ""))) is not None and parsed_date >= cutoff]
     
     # Aggregate by category
     totals = {}
