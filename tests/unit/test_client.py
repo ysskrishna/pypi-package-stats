@@ -6,7 +6,12 @@ import responses
 from requests.exceptions import HTTPError, Timeout, ConnectionError, RetryError
 from unittest.mock import Mock, patch, MagicMock
 from pypipackagestats.core.client import PyPIClient
-from pypipackagestats.core.constants import DEFAULT_CACHE_TTL, PYPI_API, STATS_API
+from pypipackagestats.core.constants import (
+    DEFAULT_CACHE_TTL,
+    PYPI_API,
+    STATS_API,
+    RATE_LIMIT_MIN_INTERVAL,
+)
 
 
 class TestPyPIClientInitialization:
@@ -373,3 +378,124 @@ class TestPyPIClientRequestConfiguration:
         adapter = session.get_adapter("https://")
         # Retry should only allow GET methods
         assert "GET" in adapter.max_retries.allowed_methods
+
+
+class TestPyPIClientRateLimiting:
+    """Test rate limiting / throttle mechanism."""
+
+    def test_throttle_skips_non_rate_limited_hosts(self):
+        """No sleep for hosts not in RATE_LIMIT_HOSTS (e.g. pypi.org)."""
+        client = PyPIClient()
+        url = "https://pypi.org/pypi/test/json"
+        with patch("pypipackagestats.core.client.time.sleep") as mock_sleep:
+            client._throttle(url)
+            client._throttle(url)
+            mock_sleep.assert_not_called()
+
+    def test_throttle_sleeps_for_rapid_requests(self):
+        """Sleep enforced on back-to-back pypistats.org requests."""
+        client = PyPIClient()
+        url = "https://pypistats.org/api/packages/test/recent"
+        # First call should not sleep (no prior request)
+        with patch("pypipackagestats.core.client.time.sleep") as mock_sleep:
+            client._throttle(url)
+            mock_sleep.assert_not_called()
+        # Immediate second call should sleep
+        with patch("pypipackagestats.core.client.time.sleep") as mock_sleep:
+            client._throttle(url)
+            mock_sleep.assert_called_once()
+            sleep_duration = mock_sleep.call_args[0][0]
+            assert 0 < sleep_duration <= RATE_LIMIT_MIN_INTERVAL
+
+    def test_throttle_no_sleep_after_interval(self):
+        """No sleep when enough time has passed since last request."""
+        client = PyPIClient()
+        url = "https://pypistats.org/api/packages/test/recent"
+        client._throttle(url)
+        # Simulate enough time passing
+        PyPIClient._host_last_request_time["pypistats.org"] = (
+            time.monotonic() - RATE_LIMIT_MIN_INTERVAL - 0.01
+        )
+        with patch("pypipackagestats.core.client.time.sleep") as mock_sleep:
+            client._throttle(url)
+            mock_sleep.assert_not_called()
+
+    @responses.activate
+    def test_throttle_skipped_for_cache_hits(self):
+        """Cache hits bypass throttle entirely."""
+        client = PyPIClient(cache_ttl=3600)
+        url = "https://pypistats.org/api/packages/test/recent"
+        responses.add(responses.GET, url, json={"data": {}}, status=200)
+
+        # First call — cache miss, throttle runs
+        with patch.object(client, "_throttle", wraps=client._throttle) as spy:
+            client._cached_get(url)
+            spy.assert_called_once_with(url)
+
+        # Second call — cache hit, throttle should NOT be called
+        with patch.object(client, "_throttle") as mock_throttle:
+            client._cached_get(url)
+            mock_throttle.assert_not_called()
+
+    @responses.activate
+    def test_throttle_called_when_cache_disabled(self):
+        """Each request throttled with --no-cache (cache_ttl=0)."""
+        client = PyPIClient(cache_ttl=0)
+        url = "https://pypistats.org/api/packages/test/recent"
+        responses.add(responses.GET, url, json={"data": {}}, status=200)
+        responses.add(responses.GET, url, json={"data": {}}, status=200)
+
+        with patch.object(client, "_throttle", wraps=client._throttle) as spy:
+            client._cached_get(url)
+            client._cached_get(url)
+            assert spy.call_count == 2
+
+    def test_throttle_thread_safety(self):
+        """Multi-threaded requests properly serialized."""
+        client = PyPIClient()
+        url = "https://pypistats.org/api/packages/test/recent"
+        call_times = []
+
+        def throttle_and_record():
+            client._throttle(url)
+            call_times.append(time.monotonic())
+
+        threads = [threading.Thread(target=throttle_and_record) for _ in range(4)]
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+
+        assert len(call_times) == 4
+        call_times.sort()
+        for i in range(1, len(call_times)):
+            gap = call_times[i] - call_times[i - 1]
+            # Each gap should be at least close to the minimum interval
+            # Use a small tolerance for timing jitter
+            assert gap >= RATE_LIMIT_MIN_INTERVAL * 0.8
+
+    @responses.activate
+    def test_consecutive_pypistats_requests_spaced(self):
+        """End-to-end: 4 pypistats calls are spaced apart."""
+        client = PyPIClient(cache_ttl=0)
+        base = "https://pypistats.org/api/packages/test/"
+        endpoints = ["recent", "overall?mirrors=false", "python_minor", "system"]
+
+        for ep in endpoints:
+            responses.add(responses.GET, base + ep, json={"data": {}}, status=200)
+
+        timestamps = []
+        original_throttle = client._throttle
+
+        def tracking_throttle(u):
+            original_throttle(u)
+            timestamps.append(time.monotonic())
+
+        with patch.object(client, "_throttle", side_effect=tracking_throttle):
+            for ep in endpoints:
+                client._cached_get(base + ep)
+
+        assert len(timestamps) == 4
+        total_span = timestamps[-1] - timestamps[0]
+        # 3 gaps × 250ms = 750ms minimum, allow some tolerance
+        assert total_span >= RATE_LIMIT_MIN_INTERVAL * 3 * 0.8
