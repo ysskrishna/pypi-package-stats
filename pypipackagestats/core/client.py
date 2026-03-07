@@ -79,32 +79,35 @@ class PyPIClient:
                 time.sleep(RATE_LIMIT_MIN_INTERVAL - elapsed)
             PyPIClient._host_last_request_time[host] = time.monotonic()
 
+    def _http_get(self, url: str) -> requests.Response:
+        """Fetch JSON from URL with throttling."""
+        self._throttle(url)
+        response = self._get_session().get(url, timeout=REQUEST_TIMEOUT)
+        response.raise_for_status()
+        return response
+
     def _cached_get(self, url: str) -> Dict[str, Any]:
         """Get URL with caching - let diskcache handle thread safety."""
         if not self.use_cache:
-            self._throttle(url)
-            response = self._get_session().get(url, timeout=REQUEST_TIMEOUT)
-            response.raise_for_status()
+            response = self._http_get(url)
             return response.json()
-        
+
         cache = get_cache()
         cache_key = f"url:{url}"
-        
+
         # diskcache handles thread safety internally
         cached_data = cache.get(cache_key, default=None)
         if cached_data is not None:
             return cached_data
-        
+
         # Fetch from API
-        self._throttle(url)
-        response = self._get_session().get(url, timeout=REQUEST_TIMEOUT)
-        response.raise_for_status()
+        response = self._http_get(url)
         data = response.json()
-        
+
         # Store in cache - diskcache handles locking
         if 200 <= response.status_code < 300:
             cache.set(cache_key, data, expire=self.cache_ttl)
-        
+
         return data
     
     def get_package_info(self, package: str) -> dict:
