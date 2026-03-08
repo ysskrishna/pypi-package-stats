@@ -1,11 +1,11 @@
 ---
-title: CLI Tool for Python Package Analytics
+title: Python Library for PyPI Package Analytics
 
-description: "Fetch PyPI package statistics and download analytics. Get daily, weekly, monthly downloads, Python version breakdowns, OS distribution, and metadata with smart caching and JSON output."
+description: "A Python library and optional CLI tool for PyPI package stats and download analytics. Fetch daily, weekly, monthly, and 180-day downloads, Python version and OS breakdowns, package metadata, with smart caching and JSON output."
 
 keywords:
   - pypi-package-stats
-  - Python CLI
+  - Python library
   - PyPI statistics
   - package analytics
   - download statistics
@@ -23,4 +23,3 @@ keywords:
 ---
 
 --8<-- "README.md"
-

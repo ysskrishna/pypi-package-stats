@@ -1,12 +1,12 @@
 """Tests for output utility functions."""
 import pytest
-from pypipackagestats.output.utils import (
+from pypipackagestats.cli.utils import (
     humanize_number,
     normalize_os_name,
-    get_upload_time,
     humanize_date,
     extract_repo_name,
 )
+from pypipackagestats.core.processing import get_upload_time
 
 
 class TestHumanizeNumber:
