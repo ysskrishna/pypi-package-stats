@@ -19,7 +19,7 @@ def get_resource_path(relative_path: str) -> Path:
     if candidate.exists():
         return candidate
 
-    candidate = Path(__file__).parent.parent / relative_path
+    candidate = Path(__file__).parent.parent.parent / relative_path
     if candidate.exists():
         return candidate
 
