@@ -7,7 +7,7 @@
 [![Documentation](https://img.shields.io/badge/docs-ysskrishna.github.io%2Fpypi--package--stats-blue.svg)](https://ysskrishna.github.io/pypi-package-stats/)
 
 
-A CLI tool and Python library for PyPI package stats and download analytics, built on the official pypistats API. Fetch daily, weekly, monthly, and 180-day downloads, Python version and OS breakdowns, package metadata, with smart disk caching.
+A Python library and optional CLI tool for PyPI package stats and download analytics, built on the official pypistats API. Fetch daily, weekly, monthly, and 180-day downloads, Python version and OS breakdowns, package metadata, with smart disk caching.
 
 ![Example Output](https://raw.githubusercontent.com/ysskrishna/pypi-package-stats/main/media/example_output.png)
 
@@ -25,20 +25,77 @@ A CLI tool and Python library for PyPI package stats and download analytics, bui
 
 ## Installation
 
+Install the library (no CLI dependencies):
+
 ```bash
 pip install pypi-package-stats
 ```
 
-## Usage
+Install with CLI support:
 
-This package can be used both as a **command-line tool** and as a **Python library**.
+```bash
+pip install pypi-package-stats[cli]
+```
 
-### CLI Usage
+## Library Usage
+
+```python
+from pypipackagestats import get_package_stats
+
+# Get package statistics
+stats = get_package_stats("requests")
+
+# Access structured data
+print(stats.package_info.name)        # "requests"
+print(stats.downloads.last_month)     # 123456789
+
+# Convert to dictionary (for JSON serialization)
+data = stats.to_dict()
+```
+
+### Advanced Options
+
+```python
+from pypipackagestats import get_package_stats, clear_cache, get_cache_info
+
+# Disable caching for fresh data
+stats = get_package_stats("requests", no_cache=True)
+
+# Custom cache TTL (5 minutes = 300 seconds)
+stats = get_package_stats("django", cache_ttl=300)
+
+# Clear all cached responses
+clear_cache()
+
+# Get cache statistics
+cache_info = get_cache_info()
+print(f"Cache size: {cache_info['size']} entries")
+print(f"Cache directory: {cache_info['directory']}")
+```
+
+## API Reference
+
+### Functions
+
+| Function | Description |
+|----------|-------------|
+| `get_package_stats(name, *, no_cache=False, cache_ttl=None)` | Fetch all statistics for a PyPI package. Returns a `PackageStats` object. |
+| `clear_cache()` | Clear all cached API responses. |
+| `get_cache_info()` | Return cache size and directory information. |
+
+
+## CLI Usage
+
+> Requires the `cli` extra: `pip install pypi-package-stats[cli]`
 
 | Command | What you get |
 |---------|--------------|
 | `pypi-package-stats package <name>` | Main view (metadata + downloads) |
 | `pypi-package-stats package <name> --json` | Machine-friendly JSON output |
+| `pypi-package-stats package <name> --no-cache` | Bypass cache for this request |
+| `pypi-package-stats package <name> --cache-ttl <seconds>` | Set custom cache TTL |
+| `pypi-package-stats cache-clear` | Remove all cached responses |
+| `pypi-package-stats cache-info` | Show cache statistics |
 | `pypi-package-stats --help` | Show help message |
 
 **Example:**
@@ -114,52 +171,7 @@ pypi-package-stats package nestedutils --json
 }
 ```
 
-### Library Usage
-
-Use `pypi-package-stats` as a Python library in your projects:
-
-```python
-from pypipackagestats import get_package_stats
-
-# Get package statistics
-stats = get_package_stats("requests")
-
-# Convert to dictionary (for JSON serialization)
-data = stats.to_dict()
-```
-
-### Advanced Usage
-
-Caching significantly speeds up repeated queries and helps avoid API rate limits when exploring multiple packages.
-
-#### CLI Advanced Options
-
-| Command | What you get |
-|---------|--------------|
-| `pypi-package-stats package <name> --no-cache` | Bypass cache for this request |
-| `pypi-package-stats package <name> --cache-ttl <seconds>` | Set custom cache TTL (e.g., `--cache-ttl 300` for 5 minutes) |
-| `pypi-package-stats cache-clear` | Remove all cached responses |
-| `pypi-package-stats cache-info` | Show cache statistics |
-
-#### Library Advanced Options
-
-```python
-from pypipackagestats import get_package_stats, clear_cache, get_cache_info
-
-# Disable caching for fresh data
-stats = get_package_stats("requests", no_cache=True)
-
-# Custom cache TTL (5 minutes = 300 seconds)
-stats = get_package_stats("django", cache_ttl=300)
-
-# Clear all cached responses
-clear_cache()
-
-# Get cache statistics
-cache_info = get_cache_info()
-print(f"Cache size: {cache_info['size']} entries")
-print(f"Cache directory: {cache_info['directory']}")
-```
+For full CLI documentation, see the [CLI Guide](CLI.md).
 
 ## Data Source & Rate Limiting
 
@@ -171,7 +183,7 @@ The built-in caching system helps minimize API calls and reduce the chance of hi
 
 * Python version and OS breakdowns are limited to the last 30 days
 * Data availability depends on the [pypistats](https://pypistats.org/) service
-* Data is usually 24–48 hours behind (pypistats limitation)
+* Data is usually 24-48 hours behind (pypistats limitation)
 
 ## Use Cases
 
@@ -208,7 +220,7 @@ MIT © [Y. Siva Sai Krishna](https://github.com/ysskrishna) - see [LICENSE](http
   <a href="https://linkedin.com/in/ysskrishna">Author's LinkedIn</a> •
   <a href="https://ysskrishna.github.io/pypi-package-stats/">Package documentation</a> •
   <a href="https://pypi.org/project/pypi-package-stats/">Package on PyPI</a> •
-  <a href="https://github.com/ysskrishna/pypi-package-stats/issues">Report Issues</a> 
+  <a href="https://github.com/ysskrishna/pypi-package-stats/issues">Report Issues</a> •
   <a href="https://github.com/ysskrishna/pypi-package-stats/blob/main/CHANGELOG.md">Changelog</a> •
   <a href="https://github.com/ysskrishna/pypi-package-stats/releases">Release History</a> •
 </p>

@@ -3,7 +3,7 @@ import typer
 from rich.console import Console
 from pypipackagestats import get_package_stats, clear_cache, get_cache_info
 from pypipackagestats.core.exceptions import PackageNotFoundError, APIError, PyPIStatsError
-from pypipackagestats.output.formatters import format_rich, print_project_banner
+from pypipackagestats.cli.formatters import format_rich, print_project_banner
 from pypipackagestats.core.constants import DEFAULT_CACHE_TTL
 
 app = typer.Typer()
@@ -19,16 +19,16 @@ def package(
     """Get package statistics."""
     try:
         stats = get_package_stats(
-            name, 
-            no_cache=no_cache, 
+            name,
+            no_cache=no_cache,
             cache_ttl=cache_ttl
         )
-        
+
         if json_output:
             console.print(json.dumps(stats.to_dict(), indent=2))
         else:
             format_rich(stats)
-            
+
     except PackageNotFoundError as e:
         console.print(f"[red]Package '{e.package_name}' not found on PyPI[/red]")
         raise typer.Exit(1)
@@ -52,9 +52,6 @@ def cache_info_cmd():
     console.print(f"[cyan]Entries:[/cyan] {info['size']}")
     console.print(f"[cyan]Directory:[/cyan] {info['cache_dir']}")
 
-def main():
+def run_cli():
     print_project_banner()
     app()
-
-if __name__ == "__main__":
-    main()

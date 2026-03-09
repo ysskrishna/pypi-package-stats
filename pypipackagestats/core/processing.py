@@ -3,7 +3,22 @@ from datetime import date, datetime, timedelta
 from nestedutils import get_at
 from pypipackagestats.core.models import PackageInfo, DownloadStats, CategoryBreakdown
 from pypipackagestats.core.constants import TOP_PYTHON_VERSIONS_COUNT
-from pypipackagestats.output.utils import get_upload_time
+
+def get_upload_time(pkg_data: dict) -> str:
+    """Extract upload_time from package data"""
+    version = get_at(pkg_data, "info.version")
+
+    if version:
+        # Try to get upload_time from the first release file
+        # Use list path to safely handle version strings that might contain special characters
+        upload_time = get_at(pkg_data, ["releases", version, 0, "upload_time"])
+        if not upload_time:
+            upload_time = get_at(pkg_data, ["releases", version, 0, "upload_time_iso_8601"])
+        if upload_time:
+            return upload_time
+
+    return ""
+
 
 def _parse_date_safe(date_str: str) -> Optional[date]:
     """Parse ISO date string safely, returning None if invalid."""

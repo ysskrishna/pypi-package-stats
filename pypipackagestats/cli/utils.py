@@ -1,5 +1,4 @@
 from datetime import datetime
-from nestedutils import get_at
 from pypipackagestats.core.constants import DATE_ISO_FORMAT_LENGTH
 
 
@@ -24,27 +23,11 @@ def normalize_os_name(os_name: str) -> str:
     return mapping.get(os_name.lower(), os_name.title())
 
 
-def get_upload_time(pkg_data: dict) -> str:
-    """Extract upload_time from package data"""
-    version = get_at(pkg_data, "info.version")
-    
-    if version:
-        # Try to get upload_time from the first release file
-        # Use list path to safely handle version strings that might contain special characters
-        upload_time = get_at(pkg_data, ["releases", version, 0, "upload_time"])
-        if not upload_time:
-            upload_time = get_at(pkg_data, ["releases", version, 0, "upload_time_iso_8601"])
-        if upload_time:
-            return upload_time
-    
-    return ""
-
-
 def humanize_date(date_str: str) -> str:
     """Convert ISO date string (YYYY-MM-DD) to human-readable format"""
     if not date_str:
         return date_str
-    
+
     try:
         # Parse ISO date format (YYYY-MM-DD)
         dt = datetime.strptime(date_str[:DATE_ISO_FORMAT_LENGTH], "%Y-%m-%d")
@@ -57,19 +40,19 @@ def humanize_date(date_str: str) -> str:
 
 def extract_repo_name(repository_url: str) -> str:
     """Extract repo name from URL (e.g., "https://github.com/owner/repo.git" -> "owner/repo").
-    
+
     Args:
         repository_url: The full repository URL
-        
+
     Returns:
         The extracted repo name in format "owner/repo", or empty string if extraction fails
     """
     if not repository_url:
         return ""
-    
+
     # Remove .git suffix if present
     repo_name = repository_url[:-4] if repository_url.endswith('.git') else repository_url
-    
+
     # Extract owner/repo from URL
     if 'github.com/' in repo_name:
         repo_name = repo_name.split('github.com/')[-1]
@@ -77,5 +60,5 @@ def extract_repo_name(repository_url: str) -> str:
         repo_name = repo_name.split('gitlab.com/')[-1]
     elif 'bitbucket.org/' in repo_name:
         repo_name = repo_name.split('bitbucket.org/')[-1]
-    
+
     return repo_name

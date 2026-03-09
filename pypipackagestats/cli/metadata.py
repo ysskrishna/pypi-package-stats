@@ -44,14 +44,14 @@ def _parse_pyproject(path: Path) -> Dict[str, Any]:
 
 def get_project_metadata() -> ProjectMetadata:
     global _cached_metadata
-    
+
     # Return cached metadata if available
     if _cached_metadata is not None:
         return _cached_metadata
-    
+
     # Read and parse the file only once
     data = _parse_pyproject(get_resource_path("pyproject.toml"))
-    
+
     # Cache the result
     _cached_metadata = ProjectMetadata(
         name=get_at(data, "project.name", ""),
@@ -60,5 +60,5 @@ def get_project_metadata() -> ProjectMetadata:
         author=get_at(data, "tool.internalurls.author_name", ""),
         author_url=get_at(data, "tool.internalurls.author_linkedin", "")
     )
-    
+
     return _cached_metadata
