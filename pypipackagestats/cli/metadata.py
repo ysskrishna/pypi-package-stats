@@ -19,6 +19,12 @@ def get_resource_path(relative_path: str) -> Path:
     if candidate.exists():
         return candidate
 
+    # Installed package: pyproject.toml is at pypipackagestats/pyproject.toml
+    candidate = Path(__file__).parent.parent / relative_path
+    if candidate.exists():
+        return candidate
+
+    # Dev environment: pyproject.toml is at repo root
     candidate = Path(__file__).parent.parent.parent / relative_path
     if candidate.exists():
         return candidate
