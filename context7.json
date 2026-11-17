@@ -1,0 +1,33 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "pypi-package-stats",
+  "description": "Python library and optional CLI for PyPI package download statistics from the pypistats API: daily, weekly, monthly and 180-day downloads, Python version and OS breakdowns and package metadata, with disk caching.",
+  "excludeFolders": [
+    "archive",
+    "archived",
+    "old",
+    "deprecated",
+    "legacy",
+    "tests",
+    ".github",
+    "docs",
+    "media"
+  ],
+  "excludeFiles": [
+    "CHANGELOG.md",
+    "changelog.md",
+    "LICENSE.md",
+    "license.md",
+    "CODE_OF_CONDUCT.md",
+    "NEWS.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "AGENTS.md",
+    "RELEASE.md"
+  ],
+  "rules": [
+    "Install with pip install pypi-package-stats and import from pypipackagestats; the CLI needs pip install \"pypi-package-stats[cli]\".",
+    "get_package_stats(name) returns a frozen PackageStats dataclass; call .to_dict() for JSON-ready output.",
+    "Results are cached on disk for 3600 seconds by default; pass no_cache=True or cache_ttl=0 to bypass the cache."
+  ]
+}
