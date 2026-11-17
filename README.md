@@ -70,7 +70,7 @@ clear_cache()
 # Get cache statistics
 cache_info = get_cache_info()
 print(f"Cache size: {cache_info['size']} entries")
-print(f"Cache directory: {cache_info['directory']}")
+print(f"Cache directory: {cache_info['cache_dir']}")
 ```
 
 ## API Reference
@@ -83,6 +83,8 @@ print(f"Cache directory: {cache_info['directory']}")
 | `clear_cache()` | Clear all cached API responses. |
 | `get_cache_info()` | Return cache size and directory information. |
 
+
+Parameters, exceptions, every field of the returned `PackageStats` and the `to_dict()` output are listed in [API.md](API.md).
 
 ## CLI Usage
 
