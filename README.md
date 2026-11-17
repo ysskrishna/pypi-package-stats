@@ -1,10 +1,12 @@
 # PyPI Package Stats
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ysskrishna/pypi-package-stats/blob/main/LICENSE)
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)
 [![PyPI](https://img.shields.io/pypi/v/pypi-package-stats)](https://pypi.org/project/pypi-package-stats/)
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/pypi-package-stats?period=total&units=INTERNATIONAL_SYSTEM&left_color=GREY&right_color=BLUE&left_text=downloads)](https://pepy.tech/projects/pypi-package-stats)
 [![Documentation](https://img.shields.io/badge/docs-ysskrishna.github.io%2Fpypi--package--stats-blue.svg)](https://ysskrishna.github.io/pypi-package-stats/)
+[![Tests](https://github.com/ysskrishna/pypi-package-stats/actions/workflows/test.yml/badge.svg)](https://github.com/ysskrishna/pypi-package-stats/actions/workflows/test.yml)
+[![Author site](https://img.shields.io/badge/author-ysskrishna.space-informational)](https://ysskrishna.space)
 [![Context7](https://img.shields.io/badge/Context7-docs-18181B)](https://context7.com/ysskrishna/pypi-package-stats)
 [![Ask DeepWiki](https://img.shields.io/badge/DeepWiki-ask-18181B)](https://deepwiki.com/ysskrishna/pypi-package-stats)
 
@@ -92,6 +94,9 @@ Parameters, exceptions, every field of the returned `PackageStats` and the `to_d
 
 > Requires the `cli` extra: `pip install pypi-package-stats[cli]`
 
+<details>
+<summary><b>CLI commands, options and example output</b></summary>
+
 | Command | What you get |
 |---------|--------------|
 | `pypi-package-stats package <name>` | Main view (metadata + downloads) |
@@ -177,6 +182,8 @@ pypi-package-stats package nestedutils --json
 
 For full CLI documentation, see the [CLI Guide](CLI.md).
 
+</details>
+
 ## Data Source & Rate Limiting
 
 This tool uses the [pypistats](https://pypistats.org/) API to fetch PyPI package statistics. The API enforces IP-based rate limits (for example, ~5 requests/sec and ~30 requests/min at the time of writing). These limits are set by pypistats.org and may change over time.
@@ -203,28 +210,39 @@ The built-in caching system helps minimize API calls and reduce the chance of hi
 
 We welcome contributions! Please see our [Contributing Guide](https://github.com/ysskrishna/pypi-package-stats/blob/main/CONTRIBUTING.md) for details.
 
+## Built and maintained by
+
+PyPI Package Stats is built and maintained by:
+
+| | Name | GitHub | Role |
+|---|------|--------|------|
+| <img src="https://github.com/ysskrishna.png?size=120" width="60" height="60" alt="Y. Siva Sai Krishna"> | **Y. Siva Sai Krishna** | [@ysskrishna](https://github.com/ysskrishna) | Creator |
+
+## Changelog
+
+See [CHANGELOG](CHANGELOG.md) for release history.
 
 ## Support
 
 If you find this library helpful:
 
 - ⭐ Star the repository
-- 🐛 Report issues
+- 🐛 [Report issues](https://github.com/ysskrishna/pypi-package-stats/issues)
 - 🔀 Submit pull requests
 - 💝 [Sponsor on GitHub](https://github.com/sponsors/ysskrishna)
 
 ## License
 
-MIT © [Y. Siva Sai Krishna](https://github.com/ysskrishna) - see [LICENSE](https://github.com/ysskrishna/pypi-package-stats/blob/main/LICENSE) for details.
+MIT © [Y. Siva Sai Krishna](https://github.com/ysskrishna) — see [LICENSE](LICENSE) for details.
 
 ---
 
 <p align="left">
   <a href="https://github.com/ysskrishna">Author's GitHub</a> •
   <a href="https://linkedin.com/in/ysskrishna">Author's LinkedIn</a> •
-  <a href="https://ysskrishna.github.io/pypi-package-stats/">Package documentation</a> •
+  <a href="https://ysskrishna.space">Author's site</a> •
   <a href="https://pypi.org/project/pypi-package-stats/">Package on PyPI</a> •
-  <a href="https://github.com/ysskrishna/pypi-package-stats/issues">Report Issues</a> •
-  <a href="https://github.com/ysskrishna/pypi-package-stats/blob/main/CHANGELOG.md">Changelog</a> •
+  <a href="https://ysskrishna.github.io/pypi-package-stats/">Package documentation</a> •
   <a href="https://github.com/ysskrishna/pypi-package-stats/releases">Release History</a> •
+  <a href="https://github.com/ysskrishna/pypi-package-stats/issues">Report Issues</a>
 </p>
