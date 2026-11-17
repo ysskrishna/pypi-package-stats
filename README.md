@@ -5,6 +5,8 @@
 [![PyPI](https://img.shields.io/pypi/v/pypi-package-stats)](https://pypi.org/project/pypi-package-stats/)
 [![PyPI Downloads](https://static.pepy.tech/personalized-badge/pypi-package-stats?period=total&units=INTERNATIONAL_SYSTEM&left_color=GREY&right_color=BLUE&left_text=downloads)](https://pepy.tech/projects/pypi-package-stats)
 [![Documentation](https://img.shields.io/badge/docs-ysskrishna.github.io%2Fpypi--package--stats-blue.svg)](https://ysskrishna.github.io/pypi-package-stats/)
+[![Context7](https://img.shields.io/badge/Context7-docs-18181B)](https://context7.com/ysskrishna/pypi-package-stats)
+[![Ask DeepWiki](https://img.shields.io/badge/DeepWiki-ask-18181B)](https://deepwiki.com/ysskrishna/pypi-package-stats)
 
 
 A Python library and optional CLI tool for PyPI package stats and download analytics, built on the official pypistats API. Fetch daily, weekly, monthly, and 180-day downloads, Python version and OS breakdowns, package metadata, with smart disk caching.
